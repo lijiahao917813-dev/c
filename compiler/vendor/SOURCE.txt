@@ -1,0 +1,3 @@
+Source: https://github.com/binji/wasm-clang
+Commit: 648c4a89997a351eef75cdaec3ef5b89d4937dec
+Apache-2.0; LLVM licenses in LICENSE.llvm. shared.js modified for C-only execution, UTF-8 I/O and result reporting.
