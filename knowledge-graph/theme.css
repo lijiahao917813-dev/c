@@ -4,6 +4,7 @@ body{background:#f5f6f1;color:var(--graph-ink);font-family:"Segoe UI","Microsoft
 .graph-app-nav a{color:#607466;text-decoration:none;padding:8px 0}.graph-app-nav a:hover{color:var(--graph-green)}
 .graph-app-brand{display:flex;align-items:center;gap:9px;color:var(--graph-green);font-family:Consolas,monospace;font-weight:800}.graph-app-brand b{font:700 14px "Microsoft YaHei",sans-serif;color:var(--graph-ink)}.graph-app-brand small{font:11px "Microsoft YaHei",sans-serif;font-weight:400;background:#e6efdf;border:1px solid #d7e5cd;border-radius:20px;padding:3px 9px;color:#62804c}
 #topbar{height:auto;min-height:58px;flex:0 0 auto;gap:8px;padding:10px 16px;background:#ffffffec;border-color:var(--graph-border);flex-wrap:wrap}
+#topbar{flex-direction:column;align-items:stretch}.graph-summary,.graph-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.graph-summary .sub{flex:1}.graph-controls #search{flex:1;max-width:350px;min-width:180px}.graph-controls .spacer{display:none}
 .btn{height:36px;border-radius:9px;border-color:#dce5d6;color:#50624d}.btn.active{background:var(--graph-green);border-color:var(--graph-green)}
 .btn:hover{border-color:#87ae7a;background:#f1f6ec}.btn.active:hover{background:#205c40;color:#fff}
 #search{height:36px;border-color:#dce5d6;border-radius:9px;background:#f8faf5}.btn:focus-visible,a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid #94bd7b;outline-offset:2px}
