@@ -195,6 +195,7 @@ button,a,input,textarea,summary{ -webkit-tap-highlight-color:transparent }button
 
 </style>
 <style id="practice-reset-styles">.practice-test-tools{margin:14px 0 18px;border:1px dashed #cbd9c7;border-radius:12px;background:#f7f9f3;color:#63755e;padding:10px 14px;font-size:12px}.practice-test-tools summary{cursor:pointer;min-height:24px;line-height:24px;font-weight:650}.practice-test-tools p{line-height:1.8;margin:9px 0 12px;max-width:650px}.practice-test-tools>div{display:flex;flex-wrap:wrap;gap:9px}.practice-test-tools .secondary-action{font-size:12px}@media(max-width:520px){.practice-test-tools>div>button{flex:1;min-width:160px}}</style>
+
 <style id="ambient-background-styles">
 /* Procedural backgrounds: no video downloads or external assets. */
 :root{--ambient-x:0px;--ambient-y:0px}
@@ -539,10 +540,11 @@ function restoreCompilerReturn(){
 }
 if(typeof window.addEventListener==='function')window.addEventListener('pageshow',restoreCompilerReturn);
 
+
 /* Ambient background runtime */
 (function initializeAmbientBackground(){
  const intro=document.getElementById('intro'),home=document.getElementById('home');
- if(!intro||!home||typeof window.addEventListener!=='function')return;
+ if(!intro||!home||typeof window.addEventListener!=='function'||typeof window.matchMedia!=='function'||typeof document.addEventListener!=='function')return;
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)'),fine=window.matchMedia('(hover: hover) and (pointer: fine)');
  let frame=0,lastX=0,lastY=0;
  function activeSurface(){if(!intro.hidden&&document.body.classList.contains('cover-active'))return intro;if(!home.classList.contains('hidden'))return home;return null}
