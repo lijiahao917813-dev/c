@@ -205,7 +205,7 @@
     .cal-cell { min-height:36px; font-size:12px; }
   }
 </style>
-<link rel="stylesheet" href="theme.css?v=2"><link rel="stylesheet" href="code-blocks.css?v=2"><script src="code-blocks.js?v=2"></script></head>
+<link rel="stylesheet" href="theme.css?v=3"><link rel="stylesheet" href="code-blocks.css?v=2"><script src="code-blocks.js?v=2"></script></head>
 <body data-page-node-id="2Bv4Bc1aCnq74x4AlFkfB9"><nav class="graph-app-nav"><a id="backToReview" href="../">← 返回复习</a><span class="graph-app-brand">C_<b>知识图谱</b><small>拓展学习</small></span></nav>
 
 <div id="topbar" data-page-node-id="0HQC7F27PIyId3ILPgtkLM"><div class="graph-summary">
@@ -308,8 +308,7 @@
     </div>
     <div class="cal-grid" id="calBody"></div>
     <div class="cal-stat" id="calStat"></div>
-    <div class="cal-note">绿色 = 那天打开过本站并完成打卡（登录即自动打卡）；
-      灰色 = 那天没有打开。格子右下角的小数字是当天新学会的知识点个数（掌握程度从「未学习」升到别的档位才算）。</div>
+    <div class="cal-note">点击日期打卡，亮起为已打卡；再点一次取消。可补记或调整日期，修改自动保存。格子右下角数字是当天新学会的知识点数，取消打卡不会清除学习记录。</div>
   </div>
 </div>
 
@@ -1500,84 +1499,72 @@ function loadCheckin(pid) {
 function saveCheckin() { if (PROFILE) lsSet(K_CHECKIN + PROFILE.id, CHECKIN); }
 
 // 登录 / 切换档案 / 刷新自动登录，都会走这里 → 同一天只记一次
+function isCheckinMarked(record) { return !!record && record.checked !== false; }
 function autoCheckin() {
   if (!PROFILE) return;
   loadCheckin(PROFILE.id);
-  var k = todayKey();
-  if (!CHECKIN[k]) {
-    CHECKIN[k] = { n: 0, at: Date.now() };
-    saveCheckin();
-  }
-  lastCheckinDay = k;
+  lastCheckinDay = todayKey();
 }
-
-// 掌握程度变化时记一笔：只有「从未学习升上去」才算当天新学会
+function toggleCheckinDay(key) {
+  if (!PROFILE || !/^\d{4}-\d{2}-\d{2}$/.test(key)) return;
+  var record = CHECKIN[key] || { n: 0, at: Date.now(), checked: false };
+  record.checked = !isCheckinMarked(CHECKIN[key]);
+  record.at = Date.now();
+  CHECKIN[key] = record;
+  saveCheckin();
+  renderCalendar();
+}
 function noteMastery(beforeLevel) {
-  if (!PROFILE) return;
-  var k = todayKey();
-  if (!CHECKIN[k]) { CHECKIN[k] = { n: 0, at: Date.now() }; }
-  if (beforeLevel === 0) CHECKIN[k].n = (CHECKIN[k].n || 0) + 1;
+  if (!PROFILE || beforeLevel !== 0) return;
+  var key = todayKey();
+  if (!CHECKIN[key]) CHECKIN[key] = { n: 0, at: Date.now(), checked: false };
+  CHECKIN[key].n = (CHECKIN[key].n || 0) + 1;
   saveCheckin();
 }
-
-// ---- 统计：累计天数 / 连续天数 / 累计新学会 ----
-function checkinStats(mOnlyYear, mOnlyMonth) {
-  var days = 0, learned = 0, month = 0, k;
-  for (k in CHECKIN) {
-    var rec = CHECKIN[k];
-    if (!rec) continue;
+function checkinStats(year, monthIndex) {
+  var days = 0, learned = 0, month = 0, key;
+  for (key in CHECKIN) {
+    var record = CHECKIN[key];
+    if (!record) continue;
+    learned += Number(record.n) || 0;
+    if (!isCheckinMarked(record)) continue;
     days++;
-    learned += rec.n || 0;
-    if (mOnlyYear != null && k.indexOf(mOnlyYear + '-' + ckPad2(mOnlyMonth + 1) + '-') === 0) month++;
+    if (year != null && key.indexOf(year + '-' + ckPad2(monthIndex + 1) + '-') === 0) month++;
   }
-  // 连续：从今天往回数；今天还没打卡就从昨天开始（当天没打开不算断）
-  var streak = 0, d = new Date();
-  if (!CHECKIN[todayKey()]) d.setDate(d.getDate() - 1);
-  while (CHECKIN[dateKeyOf(d)]) { streak++; d.setDate(d.getDate() - 1); }
+  var streak = 0, date = new Date();
+  if (!isCheckinMarked(CHECKIN[todayKey()])) date.setDate(date.getDate() - 1);
+  while (isCheckinMarked(CHECKIN[dateKeyOf(date)])) { streak++; date.setDate(date.getDate() - 1); }
   return { days: days, learned: learned, month: month, streak: streak };
 }
-
-// ---- 日历渲染（月视图） ----
 function renderCalendar() {
   var box = document.getElementById('calBody');
   if (!box) return;
-  var y = calYear, m = calMonth;
-  var start = new Date(y, m, 1).getDay();          // 0 = 周日
-  var total = new Date(y, m + 1, 0).getDate();
-  var today = todayKey();
-  var h = '', i;
-  var wd = ['日', '一', '二', '三', '四', '五', '六'];
-  for (i = 0; i < wd.length; i++) h += '<div class="cal-wd">' + wd[i] + '</div>';
-  for (i = 0; i < start; i++) h += '<div class="cal-cell cal-blank"></div>';
+  var year = calYear, month = calMonth, start = new Date(year, month, 1).getDay();
+  var total = new Date(year, month + 1, 0).getDate(), today = todayKey(), html = '', i;
+  var weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  for (i = 0; i < 7; i++) html += '<div class="cal-wd">' + weekdays[i] + '</div>';
+  for (i = 0; i < start; i++) html += '<div class="cal-cell cal-blank" aria-hidden="true"></div>';
   for (i = 1; i <= total; i++) {
-    var key = y + '-' + ckPad2(m + 1) + '-' + ckPad2(i);
-    var rec = CHECKIN[key];
-    var n = rec && rec.n ? rec.n : 0;
-    var cls = 'cal-cell ' + (rec ? 'cal-on' : 'cal-off') + (key === today ? ' cal-today' : '');
-    h += '<div class="' + cls + '" title="' + key + (rec ? '　新学会 ' + n + ' 个' : '　未打卡') + '">'
-      + '<b>' + i + '</b>' + (n ? '<i>' + n + '</i>' : '') + '</div>';
+    var key = year + '-' + ckPad2(month + 1) + '-' + ckPad2(i), record = CHECKIN[key];
+    var marked = isCheckinMarked(record), count = record && record.n ? record.n : 0;
+    var label = key + (marked ? ' 已打卡，点击取消' : ' 未打卡，点击打卡');
+    html += '<button type="button" class="cal-cell ' + (marked ? 'cal-on' : 'cal-off') + (key === today ? ' cal-today' : '') + '" data-date="' + key + '" aria-pressed="' + marked + '" aria-label="' + label + '" title="' + label + '" onclick="toggleCheckinDay(\'' + key + '\')"><b>' + i + '</b>' + (count ? '<i>' + count + '</i>' : '') + '</button>';
   }
-  box.innerHTML = h;
-  var t = document.getElementById('calTitle');
-  if (t) t.textContent = y + ' 年 ' + (m + 1) + ' 月';
-  var s = checkinStats(y, m);
-  var st = document.getElementById('calStat');
-  if (st) {
-    st.innerHTML = '本月 <b>' + s.month + '</b> 天 · 累计 <b>' + s.days + '</b> 天 · '
-      + '连续 <b>' + s.streak + '</b> 天 · 累计新学会 <b>' + s.learned + '</b> 个知识点';
-  }
+  box.innerHTML = html;
+  var title = document.getElementById('calTitle');
+  if (title) title.textContent = year + ' 年 ' + (month + 1) + ' 月';
+  var stats = checkinStats(year, month), element = document.getElementById('calStat');
+  if (element) element.innerHTML = '本月 <b>' + stats.month + '</b> 天 · 累计 <b>' + stats.days + '</b> 天 · 连续 <b>' + stats.streak + '</b> 天 · 累计新学会 <b>' + stats.learned + '</b> 个知识点';
 }
-
-// ---- 视图切换 ----
 function openCheckin() {
   checkinOpen = true;
-  if (document.body) document.body.classList.add('view-checkin');
-  var d = new Date();
-  calYear = d.getFullYear(); calMonth = d.getMonth();
+  document.body.classList.add('view-checkin');
+  autoCheckin();
+  var date = new Date(); calYear = date.getFullYear(); calMonth = date.getMonth();
   renderCalendar();
-  autoCheckin();                 // 万一页面开了一夜，进日历时先补上今天
-  renderCalendar();
+  var calendar = document.getElementById('checkin'); if (calendar) calendar.scrollTop = 0;
 }
+
 function closeCheckin() {
   checkinOpen = false;
   if (document.body) document.body.classList.remove('view-checkin');
