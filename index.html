@@ -328,7 +328,7 @@ function questionContent(text){
  const value=String(text),codeBlock=code=>'<div class="codebox"><div class="codebar"><span class="codedots">● ● ●</span><span>C 题目代码</span></div><pre><code>'+escapeHTML(formatQuestionCode(code))+'</code></pre></div>',prose=text=>text.trim()?'<p class="question">'+escapeHTML(text.trim())+'</p>':'';
  const lines=value.split(/\r?\n/);
  if(lines.length>1)return prose(lines.shift())+codeBlock(lines.join('\n'));
- const start=value.search(/\b(?:int|double|float|char|struct|const|void|unsigned|long|short)\s+[A-Za-z_*]|\b(?:printf|scanf)\s*\(/);
+ const start=value.search(/\b(?:for|while|if|switch)\s*\(|\b(?:int|double|float|char|struct|const|void|unsigned|long|short)\s+[A-Za-z_*]|\b(?:printf|scanf)\s*\(/);
  if(start<0||!value.slice(start).includes(';'))return prose(value);
  let end=start,quote='',escaped=false;
  for(;end<value.length;end++){const ch=value[end];if(quote){if(escaped)escaped=false;else if(ch==='\\')escaped=true;else if(ch===quote)quote=''}else if(ch==='"'||ch==="'")quote=ch;else if(/[\u3400-\u9fff]/.test(ch))break}
