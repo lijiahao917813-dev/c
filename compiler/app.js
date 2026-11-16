@@ -6,6 +6,7 @@ try{
  if(token&&context?.token===token){const link=$('backToStudy');link.href='../?resumeCompiler='+encodeURIComponent(token);link.textContent=context.view==='quiz'?'← 返回刚才的题目':context.view==='docs'?'← 返回刚才的文档':'← 返回错题本'}
 }catch{}
 const examples={
+ blank:{code:'#include <stdio.h>\n\nint main(void) {\n    \n    return 0;\n}\n',input:''},
  hello:{code:'#include <stdio.h>\n\nint main(void) {\n    printf("Hello, C!\\n");\n    return 0;\n}\n',input:''},
  input:{code:'#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    if (scanf("%d %d", &a, &b) != 2) {\n        printf("请输入两个整数\\n");\n        return 1;\n    }\n    printf("%d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n',input:'3 5\n'},
  array:{code:'#include <stdio.h>\n\nint main(void) {\n    int a[] = {2, 4, 6};\n    int *p = a;\n    int sum = 0;\n    for (int i = 0; i < 3; i++) {\n        sum += *(p + i);\n    }\n    printf("sum = %d\\n", sum);\n    return 0;\n}\n',input:''},
@@ -17,6 +18,15 @@ function save(){try{localStorage.setItem('cReviewCompilerDraft',JSON.stringify({
 function setStatus(text,state=''){ $('status').textContent=text;$('status').dataset.state=state; }
 function finish(){running=false;clearTimeout(timer);$('run').disabled=false;$('stop').disabled=true;$('example').disabled=false}
 function terminate(message){if(worker){worker.terminate();worker=null}finish();setStatus(message,'error')}
+function resetSource(){
+ if(running&&worker){worker.onmessage=null;worker.onerror=null;worker.terminate();worker=null}
+ finish();clearTimeout(saveTimer);
+ const source=$('source');source.value=examples.blank.code;$('stdin').value='';$('example').value='blank';
+ $('stdout').textContent='';$('stderr').textContent='';$('diagnostics').open=false;
+ source.scrollTop=0;source.scrollLeft=0;source.focus({preventScroll:true});
+ const cursor=source.value.indexOf('    \n')+4;source.setSelectionRange(cursor,cursor);
+ save();setStatus('已清空，已恢复基础模板');
+}
 function deadline(ms,message){clearTimeout(timer);timer=setTimeout(()=>terminate(message),ms)}
 function getWorker(){
  if(worker)return worker;
@@ -44,11 +54,13 @@ function run(){
  try{getWorker().postMessage({type:'run',source:$('source').value,input:$('stdin').value})}catch(error){terminate('编译工具启动失败。');$('stderr').textContent=error.message;$('diagnostics').open=true}
 }
 try{const draft=JSON.parse(localStorage.getItem('cReviewCompilerDraft')||'null');$('source').value=typeof draft?.source==='string'?draft.source:examples.hello.code;$('stdin').value=typeof draft?.input==='string'?draft.input:''}catch{$('source').value=examples.hello.code}
+$('example').value=$('source').value===examples.blank.code?'blank':'hello';
 for(const id of ['source','stdin'])$(id).addEventListener('input',()=>{clearTimeout(saveTimer);$('saveStatus').textContent='保存中…';saveTimer=setTimeout(save,300)});
 window.addEventListener('pagehide',save);
 $('source').addEventListener('keydown',event=>{if(event.key==='Tab'){event.preventDefault();const node=event.target,start=node.selectionStart,end=node.selectionEnd;node.setRangeText('    ',start,end,'end');save()}});
 document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();run()}});
 $('run').addEventListener('click',run);$('stop').addEventListener('click',()=>terminate('已停止，可修改代码后重新运行。'));
+$('resetSource').addEventListener('click',resetSource);
 $('example').addEventListener('change',()=>{const sample=examples[$('example').value];if(!sample)return;if($('source').value!==sample.code&&!confirm('载入示例会替换当前代码，是否继续？'))return;$('source').value=sample.code;$('stdin').value=sample.input;save()});
 $('clear').addEventListener('click',()=>{if(running)return;$('stdout').textContent='';$('stderr').textContent='';setStatus('准备就绪')});
 $('download').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([$('source').value],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='main.c';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});

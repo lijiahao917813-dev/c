@@ -3,3 +3,6 @@
 
 /* Shared learning control polish */
 button{min-height:44px;border-radius:12px}.panel{border-radius:16px}.primary:hover:not(:disabled){background:#205c40}.secondary{background:#edf3e9;color:#356045}.panel-head{border-color:#e1e8dc}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #7aa76d;outline-offset:3px}.text-button{min-height:30px;padding:2px 5px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Reset to a minimal C program without crowding the run toolbar. */
+.editor-tools{display:flex;align-items:center;gap:12px}.reset-source{min-height:36px;padding:5px 10px;border:1px solid #627567;border-radius:8px;background:#ffffff08;color:#dae6d7;font-size:12px;white-space:nowrap}.reset-source:hover{background:#ffffff18;border-color:#a0b591}@media(max-width:760px){.reset-source{min-height:44px}.editor-tools{gap:8px}}
