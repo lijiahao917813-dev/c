@@ -1,5 +1,10 @@
 'use strict';
 const $=id=>document.getElementById(id);
+try{
+ const token=new URL(window.location.href).searchParams.get('return');
+ const context=JSON.parse(sessionStorage.getItem('cReviewCompilerReturn')||'null');
+ if(token&&context?.token===token){const link=$('backToStudy');link.href='../?resumeCompiler='+encodeURIComponent(token);link.textContent=context.view==='quiz'?'← 返回刚才的题目':context.view==='docs'?'← 返回刚才的文档':'← 返回错题本'}
+}catch{}
 const examples={
  hello:{code:'#include <stdio.h>\n\nint main(void) {\n    printf("Hello, C!\\n");\n    return 0;\n}\n',input:''},
  input:{code:'#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    if (scanf("%d %d", &a, &b) != 2) {\n        printf("请输入两个整数\\n");\n        return 1;\n    }\n    printf("%d + %d = %d\\n", a, b, a + b);\n    return 0;\n}\n',input:'3 5\n'},
