@@ -186,6 +186,7 @@ function switchStudyMode(target){if(target==='wrongbook'){persist();wrongbookMod
 function next(skip){if(!answered&&!skip){if(selected===-1||selected===null||String(selected).trim()===''){alert('先填写结果，也可以跳过。');return}const q=currentQ(),fill=q[4]==='fill',correct=fill?normalizeAnswer(selected)===normalizeAnswer(q[2]):selected===q[2];answered=true;responses[q[6].id]={selected,correct};score=Object.values(responses).filter(r=>r.correct).length;if(!correct){const item={id:q[6].id,difficulty:q[6].difficulty,topic:q[6].topic,mode,lesson:q[6].chapter,q:q[0],options:q[1],answer:q[2],response:selected,type:fill?'fill':'choice',explanation:q[3]};wrong.push(item);saveWrongbook(item)}if(!fill)document.querySelectorAll('.option').forEach((b,j)=>{if(j===q[2])b.classList.add('correct');else if(j===selected)b.classList.add('wrong')});const e=document.getElementById('explain');e.innerHTML='<b>'+(correct?'答对了 ✓':'再记一下')+'</b> '+(fill?'正确结果：'+escapeHTML(q[2])+'。':'')+escapeHTML(q[3]);e.classList.add('show');document.getElementById('nextBtn').textContent='下一题 →';persist();if(correct)celebrateCorrect();return}markPracticed([currentQ()[6].id]);qi++;if(qi>=activeLessons()[li].qs.length){li++;qi=0}answered=false;selected=-1;persist();render()}
 
 const PRACTICE_LAYOUT=2;
+let practiceComplete=false;
 function readPracticeHistory(m){
  try{const saved=JSON.parse(localStorage.getItem('cReviewSeen:'+m)||'null');if(saved&&Array.isArray(saved.ids))return new Set(saved.ids.filter(id=>bankById.get(id)?.plan===m))}catch{}
  const ids=new Set();
@@ -215,7 +216,7 @@ function activeLessons(){
  return lessons.map(l=>({...l,qs:paper.filter(e=>bankById.get(e.id).chapter===l.id).map(asQuestion)})).filter(l=>l.qs.length);
 }
 function persist(done=false){
- if(docOnly||wrongbookMode)return;
+ if(docOnly||wrongbookMode||practiceComplete)return;
  const paper=ensurePaper(mode);if(!paper.length)return;markPracticed(Object.keys(responses));score=Object.values(responses).filter(r=>r.correct).length;
  const current=activeLessons()[li]?.qs[qi];
  const state={version:BANK_VERSION,layout:PRACTICE_LAYOUT,cursorId:current?.[6].id||null,paper,responses,mode,li,qi,done:done||li>=activeLessons().length,score,wrong,answered,selected,updatedAt:Date.now()};
@@ -223,11 +224,11 @@ function persist(done=false){
 }
 function start(m){
  const paper=drawPaper(m);if(!paper.length){showBankComplete(m);return}
- mode=m;papers[m]=paper;responses={};li=0;qi=0;score=0;wrong=[];answered=false;selected=-1;docOnly=false;wrongbookMode=false;studyTab='quiz';persist();openStudy();
+ practiceComplete=false;mode=m;papers[m]=paper;responses={};li=0;qi=0;score=0;wrong=[];answered=false;selected=-1;docOnly=false;wrongbookMode=false;studyTab='quiz';persist();openStudy();
 }
 function resume(m){
  const p=m?getPlan(m):getRecentProgress();if(!p)return;
- mode=p.mode;papers[mode]=p.paper;responses=p.responses||{};readPracticeHistory(mode);
+ practiceComplete=false;mode=p.mode;papers[mode]=p.paper;responses=p.responses||{};readPracticeHistory(mode);
  let cursor=p.cursorId;
  if(!cursor&&!p.done){const old=mode==='full'&&p.layout!==PRACTICE_LAYOUT?lessons:activeLessons();const chapter=old[p.li||0];if(mode==='full'&&p.layout!==PRACTICE_LAYOUT)cursor=p.paper.filter(e=>bankById.get(e.id).chapter===chapter?.id)[p.qi||0]?.id;else cursor=chapter?.qs?.[p.qi||0]?.[6].id}
  const stages=activeLessons();li=p.done?stages.length:0;qi=0;
@@ -237,7 +238,7 @@ function resume(m){
 function restartSelected(){start(mode)}
 function renderNav(){const stages=activeLessons();document.getElementById('lessonNav').innerHTML='<h4>'+(mode==='full'?'难度递进':'复习章节')+'</h4>'+stages.map((l,i)=>'<button class="lesson '+(i===li?'active':'')+'" onclick="jump('+i+')">'+String(i+1).padStart(2,'0')+'　'+escapeHTML(l.id)+' <small>'+l.qs.length+'题</small></button>').join('')}
 function showBankComplete(m){
- mode=m;docOnly=false;wrongbookMode=false;document.getElementById('home').classList.add('hidden');document.getElementById('study').classList.remove('hidden');document.getElementById('result').classList.remove('show');document.getElementById('lessonPane').classList.remove('hidden');document.getElementById('progressWrap').classList.add('hidden');document.getElementById('lessonNav').innerHTML='<h4>复习完成</h4>';syncStudyModeSwitch();
+ practiceComplete=true;mode=m;docOnly=false;wrongbookMode=false;document.getElementById('home').classList.add('hidden');document.getElementById('study').classList.remove('hidden');document.getElementById('result').classList.remove('show');document.getElementById('lessonPane').classList.remove('hidden');document.getElementById('progressWrap').classList.add('hidden');document.getElementById('lessonNav').innerHTML='<h4>复习完成</h4>';syncStudyModeSwitch();
  document.getElementById('lessonPane').innerHTML='<div class="bank-complete"><div class="kicker">'+(m==='pass'?'及格速通':'高分全覆盖')+'</div><h2>这套题库已经刷完了</h2><p>已覆盖全部 '+planQuestions(m).length+' 道题。错题会继续保留，可进入错题本巩固。</p><button class="primary" onclick="openWrongbook()">打开错题本</button> <button class="subtle" onclick="resetPracticeHistory()">重新复习本题库（允许重复）</button></div>';
 }
 function resetPracticeHistory(){localStorage.setItem('cReviewSeen:'+mode,JSON.stringify({ids:[]}));start(mode)}
