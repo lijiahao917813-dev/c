@@ -229,8 +229,38 @@ function renderDocument(){const titles=mode==='full'?basicDocChapters.concat(adv
 function syncStudyModeSwitch(){const docs=document.getElementById('studyDocsTab'),quiz=document.getElementById('studyQuizTab'),book=document.getElementById('studyWrongbookTab');docs.classList.toggle('active',docOnly&&!wrongbookMode);quiz.classList.toggle('active',!docOnly&&!wrongbookMode);book.classList.toggle('active',wrongbookMode);docs.setAttribute('aria-pressed',String(docOnly&&!wrongbookMode));quiz.setAttribute('aria-pressed',String(!docOnly&&!wrongbookMode));book.setAttribute('aria-pressed',String(wrongbookMode));document.getElementById('studyTitle').textContent=wrongbookMode?'📕 错题本':docOnly?(mode==='pass'?'⚡ 及格速通 · 技术文档':'✦ 高分全覆盖 · 技术文档'):(mode==='pass'?'⚡ 及格速通':'✦ 高分全覆盖')}
 function switchStudyMode(target){if(target==='wrongbook'){if(!docOnly&&!wrongbookMode)persist();wrongbookMode=true;docOnly=false}else if(target==='docs'){wrongbookMode=false;if(!docOnly){const lesson=activeLessons()[li];if(lesson)docTitle=lesson.id;persist();docOnly=true;studyTab='notes'}}else{if(wrongbookMode){wrongbookMode=false;const saved=getPlan(mode);if(saved&&!saved.done){resume(mode);return}}else if(docOnly){const saved=getPlan(mode);if(saved&&!saved.done){resume(mode);return}const index=activeLessons().findIndex(lesson=>lesson.id===docTitle);if(index>=0){li=index;qi=0}}docOnly=false;studyTab='quiz'}syncStudyModeSwitch();render()}
 function setTab(tab){studyTab=tab;render()}
+function formatQuestionCode(source){
+ const code=String(source).trim(),lines=[],braces=[];let line='',indent=0,parens=0,brackets=0;
+ const flush=()=>{if(line.trim())lines.push('    '.repeat(indent)+line.trim());line=''};
+ for(let i=0;i<code.length;i++){
+  const ch=code[i],next=code[i+1];
+  if(ch==='"'||ch==="'"){let literal=ch;for(i++;i<code.length;i++){literal+=code[i];if(code[i]==='\\'&&i+1<code.length)literal+=code[++i];else if(code[i]===ch)break}line+=literal;continue}
+  if(ch==='/'&&(next==='/'||next==='*')){const block=next==='*';let comment=ch+next;i+=2;for(;i<code.length;i++){if(!block&&code[i]==='\n'){i--;break}comment+=code[i];if(block&&code[i]==='*'&&code[i+1]==='/'){comment+='/';i++;break}}line+=(line&&!line.endsWith(' ')?' ':'')+comment;if(!block)flush();continue}
+  if(ch==='#'&&!line.trim()){for(;i<code.length&&code[i]!=='\n';i++)line+=code[i];flush();continue}
+  if(/\s/.test(ch)){if(line&&!line.endsWith(' '))line+=' ';continue}
+  if(ch==='(')parens++;
+  if(ch===')')parens--;
+  if(ch==='[')brackets++;
+  if(ch===']')brackets--;
+  if(ch==='{'){
+   const initializer=braces[braces.length-1]==='init'||/=[\s]*$/.test(line)||parens>0;
+   braces.push(initializer?'init':'block');
+   if(initializer){line+=ch;continue}
+   line=line.trimEnd()+' {';flush();indent++;continue;
+  }
+  if(ch==='}'){
+   const kind=braces.pop();if(kind==='init'){line+=ch;continue}
+   flush();indent=Math.max(0,indent-1);line='}';
+   const tail=code.slice(i+1).trimStart();
+   if(/^(else\b|while\b)/.test(tail))line+=' ';else if(!/^[;,)]/.test(tail))flush();continue;
+  }
+  line+=ch;
+  if(ch===';'&&parens===0&&brackets===0&&!braces.includes('init'))flush();
+ }
+ flush();return lines.join('\n');
+}
 function questionContent(text){
- const value=String(text),codeBlock=code=>'<div class="codebox"><div class="codebar"><span class="codedots">● ● ●</span><span>C 题目代码</span></div><pre><code>'+escapeHTML(code)+'</code></pre></div>',prose=text=>text.trim()?'<p class="question">'+escapeHTML(text.trim())+'</p>':'';
+ const value=String(text),codeBlock=code=>'<div class="codebox"><div class="codebar"><span class="codedots">● ● ●</span><span>C 题目代码</span></div><pre><code>'+escapeHTML(formatQuestionCode(code))+'</code></pre></div>',prose=text=>text.trim()?'<p class="question">'+escapeHTML(text.trim())+'</p>':'';
  const lines=value.split(/\r?\n/);
  if(lines.length>1)return prose(lines.shift())+codeBlock(lines.join('\n'));
  const start=value.search(/\b(?:int|double|float|char|struct|const|void|unsigned|long|short)\s+[A-Za-z_*]|\b(?:printf|scanf)\s*\(/);
