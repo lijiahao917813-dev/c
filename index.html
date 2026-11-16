@@ -559,7 +559,23 @@ applyFeedbackPreferences();
 updateContinue();updateWrongbookCounts();
 function enterStudyApp(){const body=document.body,intro=document.getElementById('intro'),dashboard=document.getElementById('dashboard');if(!body.classList.contains('cover-active'))return;body.classList.remove('cover-active');body.classList.add('cover-transition');dashboard.classList.add('dashboard-entering');intro.classList.add('is-launching');setTimeout(()=>{intro.hidden=true;body.classList.remove('cover-transition');dashboard.classList.remove('dashboard-entering')},900)}
 
-function openKnowledgeGraph(link,event){if(event&&(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey))return true;if(document.getElementById('home').classList.contains('hidden')){openCompilerFromStudy(link,event);link.href=link.href.replace(/compiler\/\?return=/,'knowledge-graph/?return=')}return true}
+function openKnowledgeGraph(link,event){
+ if(event&&(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey))return true;
+ if(document.getElementById('home').classList.contains('hidden')){
+  openCompilerFromStudy(link,event);link.href=link.href.replace(/compiler\/\?return=/,'knowledge-graph/?return=');
+ }else try{sessionStorage.setItem('cReviewGraphHomeReturn',JSON.stringify({mode,entry:!document.getElementById('entryChoices').classList.contains('hidden'),at:Date.now()}))}catch{}
+ return true;
+}
+function restoreKnowledgeGraphHome(){
+ if(!window.location)return;const url=new URL(window.location.href);if(!url.searchParams.has('resumeGraph'))return;
+ let context;try{context=JSON.parse(sessionStorage.getItem('cReviewGraphHomeReturn')||'null')}catch{}
+ if(!context||!['pass','full'].includes(context.mode)||Date.now()-context.at>86400000)return;
+ sessionStorage.removeItem('cReviewGraphHomeReturn');url.searchParams.delete('resumeGraph');history.replaceState(history.state,'',url.pathname+url.search+url.hash);
+ document.body.classList.remove('cover-active','cover-transition');document.getElementById('intro').hidden=true;document.getElementById('intro').style.display='none';
+ document.getElementById('study').classList.add('hidden');document.getElementById('home').classList.remove('hidden');selectPlan(context.mode);if(!context.entry)backToPlans();updateContinue();
+}
+if(typeof window.addEventListener==='function')window.addEventListener('pageshow',restoreKnowledgeGraphHome);
+
 function openCompilerFromStudy(link,event){
  if(event&&(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey))return true;
  try{
