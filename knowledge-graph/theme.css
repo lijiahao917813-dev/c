@@ -1,0 +1,19 @@
+:root{--graph-green:#286b4c;--graph-ink:#202a25;--graph-border:#dfe7db}
+body{background:#f5f6f1;color:var(--graph-ink);font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+.graph-app-nav{position:relative;z-index:70;flex:0 0 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;background:#f5f6f1;border-bottom:1px solid var(--graph-border);font-size:13px}
+.graph-app-nav a{color:#607466;text-decoration:none;padding:8px 0}.graph-app-nav a:hover{color:var(--graph-green)}
+.graph-app-brand{display:flex;align-items:center;gap:9px;color:var(--graph-green);font-family:Consolas,monospace;font-weight:800}.graph-app-brand b{font:700 14px "Microsoft YaHei",sans-serif;color:var(--graph-ink)}.graph-app-brand small{font:11px "Microsoft YaHei",sans-serif;font-weight:400;background:#e6efdf;border:1px solid #d7e5cd;border-radius:20px;padding:3px 9px;color:#62804c}
+#topbar{height:auto;min-height:58px;flex:0 0 auto;gap:8px;padding:10px 16px;background:#ffffffec;border-color:var(--graph-border);flex-wrap:wrap}
+.btn{height:36px;border-radius:9px;border-color:#dce5d6;color:#50624d}.btn.active{background:var(--graph-green);border-color:var(--graph-green)}
+.btn:hover{border-color:#87ae7a;background:#f1f6ec}.btn.active:hover{background:#205c40;color:#fff}
+#search{height:36px;border-color:#dce5d6;border-radius:9px;background:#f8faf5}.btn:focus-visible,a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid #94bd7b;outline-offset:2px}
+#chart{background:radial-gradient(ellipse at 40% 0%,#f2f7ea,#fff 70%)}
+#panel{flex-basis:360px;width:360px;border-color:var(--graph-border);padding:20px}#panel h2{color:#24382a}#panel .sec-title{color:#3b5940}
+.mastery,.imp{border-color:#e1e9d9;background:#f7f9f3;border-radius:11px}.tag{border-radius:7px;border-color:#e0e8d9;background:#f1f5ed;color:#63745d}.nitem{border-radius:8px;border-color:#e2eadc;background:#f5f8f0;color:#356544}.nitem:hover{background:#e8f0df}.warn{border-radius:9px;background:#fcf7ee;border-color:#eee1ca;color:#8c653e}
+.legend-note{border-radius:11px;border-color:#dce5d3;box-shadow:0 5px 16px #253d2510}
+#home{top:48px;background:radial-gradient(ellipse at 20% 10%,#e2edcf,#f6f8f1 60%,#eaf1e4)}.home-badge,.home-enter{color:var(--graph-green);border-color:#cfdfc1;background:#f7faef}.home-inner h1 .accent{color:var(--graph-green)}
+.lg-card{border-radius:20px;border-color:var(--graph-border)}.lg-link{color:var(--graph-green)}
+pre.code{border-radius:10px;border-color:var(--graph-border)}
+#panel .codebox{margin:10px 0 16px;box-shadow:none}#panel .codebox pre{font-size:12px;padding:14px;white-space:pre}#panel .code-label{font-size:10px}
+@media(max-width:900px){.graph-app-nav{padding:0 12px}.graph-app-brand small{display:none}#topbar{padding:8px;gap:7px}#topbar .btn{height:36px;padding:0 10px}#topbar .title{font-size:14px}#search{flex:1;min-width:155px;width:auto;font-size:16px}#panel{flex:0 1 43%;width:100%;max-height:43%;padding:14px}#chart{min-height:180px}.legend-note{max-width:calc(100% - 16px);font-size:10px}#switchGraph{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
