@@ -1,4 +1,6 @@
 (function(){
+ // Check-ins now live on the review home page; keep the same profile data.
+ for(const id of ['btnCheckin','homeCheckin'])document.getElementById(id)?.remove();
  const back=document.getElementById('backToReview');
  let context=null;try{const token=new URL(location.href).searchParams.get('return');const saved=JSON.parse(sessionStorage.getItem('cReviewCompilerReturn')||'null');if(token&&saved?.token===token)context=saved}catch{}
  if(context){back.href='../?resumeCompiler='+encodeURIComponent(context.token);back.textContent=context.view==='quiz'?'← 返回刚才的题目':context.view==='docs'?'← 返回刚才的文档':'← 返回错题本'}
