@@ -1520,15 +1520,15 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "类型与转换",
-      "p": "sizeof 的结果类型是什么？",
+      "p": "int a=3; double b=2.0; 表达式 a/b 的结果是？",
       "options": [
-        "size_t",
-        "int 必定",
-        "double",
-        "char"
+        "1.5",
+        "1",
+        "0",
+        "编译错误"
       ],
       "answer": 0,
-      "why": "sizeof 的类型是无符号整数类型 size_t。",
+      "why": "浮点操作数参与运算，使用浮点除法。",
       "d": 2,
       "type": "choice"
     },
@@ -1548,14 +1548,14 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "类型与转换",
-      "p": "C 的字符常量 'A' 的类型是 char。",
+      "p": "char ch='A'; printf(\"%c\",ch); 会输出字符 A。",
       "options": [
         "正确",
         "错误"
       ],
-      "answer": 1,
-      "why": "C 中普通整数字符常量类型为 int。",
-      "d": 2,
+      "answer": 0,
+      "why": "%c 按字符形式输出。",
+      "d": 1,
       "type": "judge"
     },
     {
@@ -1700,15 +1700,17 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "优先级与逗号",
-      "p": "逗号运算符与函数实参之间的分隔逗号含义完全相同。",
+      "p": "求整数 a、b 中较小者，正确的条件表达式是？",
       "options": [
-        "正确",
-        "错误"
+        "a<b?a:b",
+        "a<b:a?b",
+        "a?b:a<b",
+        "a<b?a+b:0"
       ],
-      "answer": 1,
-      "why": "实参分隔符不是逗号运算符，不保证按从左到右求值。",
-      "d": 3,
-      "type": "judge"
+      "answer": 0,
+      "why": "条件成立取 a，否则取 b。",
+      "d": 2,
+      "type": "choice"
     },
     {
       "id": "full-021-6",
@@ -1748,16 +1750,16 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "短路与副作用",
-      "p": "为什么 i++ + ++i 不能按固定顺序手算？",
+      "p": "x 为 0 时，x!=0 && 10/x>1 的结果是？",
       "options": [
-        "同一对象的修改未排序，存在未定义行为",
-        "结果一定为 2i+2",
-        "总从左到右",
-        "只要用括号就安全"
+        "0",
+        "1",
+        "一定执行 10/x",
+        "语法错误"
       ],
       "answer": 0,
-      "why": "+ 不在两个操作数之间建立求值顺序。",
-      "d": 3,
+      "why": "左侧为假，不计算右侧除法。",
+      "d": 2,
       "type": "choice"
     },
     {
@@ -1802,15 +1804,15 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "格式与输入陷阱",
-      "p": "打印 size_t n 的正确格式是？",
+      "p": "输出 double 变量 x 并保留两位小数，应使用？",
       "options": [
-        "%zu",
-        "%d 必定正确",
-        "%f",
-        "%p"
+        "printf(\"%.2f\",x);",
+        "printf(\"%2d\",x);",
+        "printf(\"%c\",x);",
+        "printf(\"%.2s\",x);"
       ],
       "answer": 0,
-      "why": "%zu 对应 size_t。",
+      "why": "%.2f 保留小数点后两位。",
       "d": 2,
       "type": "choice"
     },
@@ -1836,16 +1838,16 @@
       "plan": "full",
       "chapter": "基础语法",
       "topic": "格式与输入陷阱",
-      "p": "printf 的 %f 接收 float 实参时，实际传入什么类型？",
+      "p": "scanf(\"%d,%d\",&a,&b) 读取两个整数，输入应怎样分隔？",
       "options": [
-        "double",
-        "float 原样",
-        "int",
-        "long double"
+        "英文逗号",
+        "任意空格即可",
+        "必须用冒号",
+        "不能输入分隔符"
       ],
       "answer": 0,
-      "why": "可变参数中的 float 会提升为 double。",
-      "d": 3,
+      "why": "格式中的普通字符需要与输入对应。",
+      "d": 2,
       "type": "choice"
     },
     {
@@ -2059,93 +2061,83 @@
       "id": "full-026-1",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "宏展开后表达式的结果是多少？\n#define MUL(x) x*x\nint n=MUL(2+1);",
-      "answer": "5",
-      "why": "展开为 2+1*2+1，按优先级结果为 5。",
-      "d": 3,
-      "type": "fill"
+      "topic": "字符、转义与输出",
+      "p": "表示换行的转义字符是？",
+      "options": [
+        "\\n",
+        "/n",
+        "\\t",
+        "\\0"
+      ],
+      "answer": 0,
+      "why": "反斜杠加 n 表示换行，\\t 是制表符，\\0 是空字符。",
+      "d": 1,
+      "type": "choice"
     },
     {
       "id": "full-026-2",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "安全处理普通算术参数的平方宏应写成？",
-      "options": [
-        "#define SQ(x) ((x)*(x))",
-        "#define SQ(x) x*x",
-        "#define SQ(x) (x*x)",
-        "#define SQ x*x"
-      ],
-      "answer": 0,
-      "why": "参数及整体都加括号；有副作用的实参仍应避免。",
+      "topic": "字符、转义与输出",
+      "p": "写出输出结果（多个值用空格分隔）：\nchar ch='5'; printf(\"%d\",ch-'0');",
+      "answer": "5",
+      "why": "数字字符减去字符 0，可得到对应的整数。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-026-3",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "头文件中的函数声明可以替代函数定义。",
+      "topic": "字符、转义与输出",
+      "p": "输出一个双引号，哪条语句正确？",
       "options": [
-        "正确",
-        "错误"
+        "printf(\"\\\"\");",
+        "printf(\"\"\"\");",
+        "printf(\"/\"\");",
+        "printf('\"');"
       ],
-      "answer": 1,
-      "why": "声明描述接口，链接时仍需要实现。",
+      "answer": 0,
+      "why": "字符串内部的双引号需要用反斜杠转义。",
       "d": 2,
-      "type": "judge"
+      "type": "choice"
     },
     {
       "id": "full-026-4",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "调用已声明但未提供实现的外部函数，通常在哪阶段报告未定义引用？",
+      "topic": "字符、转义与输出",
+      "p": "单引号括起的 'a' 与双引号括起的 \"a\" 可以完全互换。",
       "options": [
-        "链接",
-        "预处理",
-        "运行结束后",
-        "宏展开"
+        "正确",
+        "错误"
       ],
-      "answer": 0,
-      "why": "链接阶段解析目标文件中的外部符号。",
-      "d": 2,
-      "type": "choice"
+      "answer": 1,
+      "why": "前者是字符常量，后者是含结束符的字符串。",
+      "d": 1,
+      "type": "judge"
     },
     {
       "id": "full-026-5",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "文件作用域 static 函数的链接属性是？",
-      "options": [
-        "内部链接",
-        "外部链接",
-        "无作用域",
-        "所有文件共用"
-      ],
-      "answer": 0,
-      "why": "名称仅在当前翻译单元可引用。",
-      "d": 3,
-      "type": "choice"
+      "topic": "字符、转义与输出",
+      "p": "写出输出结果（多个值用空格分隔）：\nchar ch='6'; if(ch>='0' && ch<='9') printf(\"%d\",ch-'0'+2); else printf(\"X\");",
+      "answer": "8",
+      "why": "字符 6 在数字字符范围内，转换为整数 6，再加 2。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-026-6",
       "plan": "full",
       "chapter": "基础语法",
-      "topic": "宏与编译流程",
-      "p": "宏参数出现两次时，传入 i++ 可能被求值两次并引发问题。",
-      "options": [
-        "正确",
-        "错误"
-      ],
-      "answer": 0,
-      "why": "宏做文本替换，不自动保存实参值。",
-      "d": 3,
-      "type": "judge"
+      "topic": "字符、转义与输出",
+      "p": "写出输出结果（多个值用空格分隔）：\nint x=8; printf(\"x=%d,%%\",x);",
+      "answer": "x=8,%",
+      "why": "%d 输出整数，%% 输出一个百分号。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-027-1",
@@ -2748,9 +2740,9 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "聚合初始化规则",
-      "p": "写出输出结果（多个值用空格分隔）：\nint a[5]={[2]=7}; printf(\"%d %d\",a[1],a[2]);",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[5]={0,0,7}; printf(\"%d %d\",a[1],a[2]);",
       "answer": "0 7",
-      "why": "指定下标初始化，其余元素零初始化。",
+      "why": "前三项依次为 0、0、7。",
       "d": 2,
       "type": "fill"
     },
@@ -2802,9 +2794,9 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "聚合初始化规则",
-      "p": "写出输出结果（多个值用空格分隔）：\nint a[4]={[1]=2,3}; printf(\"%d %d\",a[2],a[3]);",
-      "answer": "3 0",
-      "why": "指定下标 1 后，下一个初值顺次给下标 2。",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[4]={1,2,3}; a[2]+=a[1]; printf(\"%d %d\",a[2],a[3]);",
+      "answer": "5 0",
+      "why": "第三项加 2 得 5，未显式初始化的末项为 0。",
       "d": 2,
       "type": "fill"
     },
@@ -2829,7 +2821,7 @@
       "id": "full-036-1",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
+      "topic": "数组遍历与边界",
       "p": "写出输出结果（多个值用空格分隔）：\nint a[]={1,3,5,7},s=0; for(int i=3;i>=0;i--)s=s*10+a[i]; printf(\"%d\",s);",
       "answer": "7531",
       "why": "逆序读取并拼接各位。",
@@ -2840,7 +2832,7 @@
       "id": "full-036-2",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
+      "topic": "数组遍历与边界",
       "p": "写出输出结果（多个值用空格分隔）：\nint a[]={4,2,7,1},m=0; for(int i=1;i<4;i++)if(a[i]<a[m])m=i; printf(\"%d\",m);",
       "answer": "3",
       "why": "最小元素 1 的下标为 3。",
@@ -2851,39 +2843,39 @@
       "id": "full-036-3",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
-      "p": "遍历 n 个元素一次的时间复杂度通常是？",
+      "topic": "数组遍历与边界",
+      "p": "长度为 n 的数组，全部元素的下标范围是？",
       "options": [
-        "O(n)",
-        "O(1)",
-        "O(n²)",
-        "O(log n)"
+        "0 到 n-1",
+        "1 到 n",
+        "0 到 n",
+        "1 到 n-1"
       ],
       "answer": 0,
-      "why": "每个元素只进行常数次处理。",
-      "d": 2,
+      "why": "下标从 0 开始，最后为 n-1。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-036-4",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
-      "p": "访问 a+n 指向的位置，与访问 a[n] 一样都合法。",
+      "topic": "数组遍历与边界",
+      "p": "int a[4]; 的 a[4] 是数组最后一个元素。",
       "options": [
         "正确",
         "错误"
       ],
       "answer": 1,
-      "why": "可以形成末尾后一位指针，但不能解引用。",
-      "d": 2,
+      "why": "合法下标到 3，a[4] 已越界。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-036-5",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
+      "topic": "数组遍历与边界",
       "p": "写出输出结果（多个值用空格分隔）：\nint a[]={5,2,5,3}; int k=-1; for(int i=0;i<4;i++)if(a[i]==5){k=i;break;}printf(\"%d\",k);",
       "answer": "0",
       "why": "第一次找到目标即 break。",
@@ -2894,7 +2886,7 @@
       "id": "full-036-6",
       "plan": "full",
       "chapter": "数组",
-      "topic": "遍历边界与复杂度",
+      "topic": "数组遍历与边界",
       "p": "写出输出结果（多个值用空格分隔）：\nint a[]={2,4,6,8}; for(int i=1;i<4;i++)a[i]+=a[i-1];printf(\"%d\",a[3]);",
       "answer": "20",
       "why": "原地计算前缀和，依次为 2、6、12、20。",
@@ -2934,16 +2926,16 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "二维地址与布局",
-      "p": "int a[2][3]; 表达式 a+1 的类型是？",
+      "p": "int a[2][3]; 表示几行几列？",
       "options": [
-        "指向含 3 个 int 的数组的指针",
-        "int*",
-        "int**",
-        "指向含 2 个 int 的数组的指针"
+        "2 行 3 列",
+        "3 行 2 列",
+        "2 行 2 列",
+        "1 行 6 列"
       ],
       "answer": 0,
-      "why": "a 退化为行指针，每步跨越一行。",
-      "d": 3,
+      "why": "第一维是行数，第二维是列数。",
+      "d": 1,
       "type": "choice"
     },
     {
@@ -2951,15 +2943,11 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "二维地址与布局",
-      "p": "二维数组 int a[2][3] 可直接作为 int ** 参数传入。",
-      "options": [
-        "正确",
-        "错误"
-      ],
-      "answer": 1,
-      "why": "退化后的类型是 int (*)[3]，不是 int**。",
-      "d": 3,
-      "type": "judge"
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[2][3]={{1,2,3},{4,5,6}};int s=0;for(int i=0;i<2;i++)s+=a[i][1];printf(\"%d\",s);",
+      "answer": "7",
+      "why": "累加第二列的 2 和 5。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-037-5",
@@ -3234,16 +3222,16 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "数组形参陷阱",
-      "p": "void f(int a[10]) 中 sizeof(a) 是什么？",
+      "p": "函数处理数组 a 的前 n 项，合适的形参形式是？",
       "options": [
-        "指针的大小",
-        "10 个 int 的大小",
-        "10",
-        "数组实参长度"
+        "void f(int a[],int n)",
+        "void f(int a,int n)",
+        "void f(int n[])",
+        "void f(void)"
       ],
       "answer": 0,
-      "why": "数组形参调整为指针类型。",
-      "d": 3,
+      "why": "数组参数配合长度便于遍历指定范围。",
+      "d": 2,
       "type": "choice"
     },
     {
@@ -3262,17 +3250,11 @@
       "plan": "full",
       "chapter": "数组",
       "topic": "数组形参陷阱",
-      "p": "void f(const int a[],int n) 中 const 主要限制什么？",
-      "options": [
-        "不能通过 a 改写元素",
-        "数组长度不能改变",
-        "调用者必须传 const 数组",
-        "函数不能读取数组"
-      ],
-      "answer": 0,
-      "why": "const 限定通过该访问路径的写入。",
+      "p": "写出输出结果（多个值用空格分隔）：\nint sum(int a[],int n){int s=0;for(int i=0;i<n;i++)s+=a[i];return s;}int main(void){int a[]={3,5,7};printf(\"%d\",sum(a,2));return 0;}",
+      "answer": "8",
+      "why": "n 为 2，只累加前两项。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-041-4",
@@ -3431,16 +3413,16 @@
       "plan": "full",
       "chapter": "函数",
       "topic": "原型与返回路径",
-      "p": "非 void 函数缺失返回值，调用者使用该值时应如何判断？",
+      "p": "int f(int x){if(x>0)return 1;else return 0;} 中 x=-2 时返回？",
       "options": [
-        "不能依赖，可能出现未定义行为",
-        "保证为 0",
-        "保证为最后一项",
-        "总是返回参数"
+        "0",
+        "1",
+        "-2",
+        "没有返回值"
       ],
       "answer": 0,
-      "why": "除 main 等标准特殊情况外，需要保证使用到的返回路径提供值。",
-      "d": 3,
+      "why": "负数进入 else 返回 0。",
+      "d": 1,
       "type": "choice"
     },
     {
@@ -3589,16 +3571,16 @@
       "plan": "full",
       "chapter": "函数",
       "topic": "static 与遮蔽",
-      "p": "局部 static 变量的作用域与存储期分别是？",
+      "p": "函数内 static 局部计数器，下次调用时会怎样？",
       "options": [
-        "块作用域，静态存储期",
-        "文件作用域，自动存储期",
-        "块作用域，自动存储期",
-        "无作用域，动态存储期"
+        "保留上次调用结束时的值",
+        "总是重新变为 0",
+        "变成函数参数",
+        "不能再次使用"
       ],
       "answer": 0,
-      "why": "可见范围与存在时长是两个概念。",
-      "d": 3,
+      "why": "静态局部变量只初始化一次。",
+      "d": 2,
       "type": "choice"
     },
     {
@@ -3617,17 +3599,11 @@
       "plan": "full",
       "chapter": "函数",
       "topic": "static 与遮蔽",
-      "p": "返回哪个地址通常不会因函数返回而立即悬空？",
-      "options": [
-        "函数内 static int 对象的地址",
-        "函数内普通 int 的地址",
-        "普通 int 形参地址",
-        "已经 free 的地址"
-      ],
-      "answer": 0,
-      "why": "static 对象一直存续到程序结束。",
-      "d": 3,
-      "type": "choice"
+      "p": "写出输出结果（多个值用空格分隔）：\nint n=5;void f(void){n+=2;}int main(void){f();f();printf(\"%d\",n);return 0;}",
+      "answer": "9",
+      "why": "两次调用各给全局变量加 2。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-046-1",
@@ -3917,16 +3893,16 @@
       "plan": "full",
       "chapter": "函数",
       "topic": "递归与共享状态",
-      "p": "对有副作用的 f(a)+f(b)，为什么不宜假定左调用先执行？",
+      "p": "阅读递归函数时，首先应该找到什么？",
       "options": [
-        "+ 不保证左右操作数的求值顺序",
-        "所有函数都右到左",
-        "只有递归有这个问题",
-        "加括号就保证"
+        "结束递归的条件和每次参数怎样变化",
+        "变量名字的长度",
+        "printf 有几个字符",
+        "函数在文件的第几行"
       ],
       "answer": 0,
-      "why": "先拆成独立语句可明确执行先后。",
-      "d": 3,
+      "why": "先明确停止条件，再跟踪参数与返回值。",
+      "d": 2,
       "type": "choice"
     },
     {
@@ -4121,15 +4097,17 @@
       "plan": "full",
       "chapter": "指针",
       "topic": "步长与指针差",
-      "p": "来自两个无关数组的指针可以总用相减求距离。",
+      "p": "int a[]={3,6,9};int *p=a; 执行 p+=2 后 *p 是？",
       "options": [
-        "正确",
-        "错误"
+        "9",
+        "3",
+        "6",
+        "2"
       ],
-      "answer": 1,
-      "why": "指针相减仅在同一数组及其末尾后一位的允许范围内有定义。",
-      "d": 3,
-      "type": "judge"
+      "answer": 0,
+      "why": "移动两个元素，指向 a[2]。",
+      "d": 2,
+      "type": "choice"
     },
     {
       "id": "full-052-5",
@@ -4147,17 +4125,15 @@
       "plan": "full",
       "chapter": "指针",
       "topic": "步长与指针差",
-      "p": "标准 C 是否定义了 void* 的加一运算？",
+      "p": "int a[]={2,4};int *p=a; 执行 p++ 后，*p 为 4。",
       "options": [
-        "没有，这是某些编译器扩展",
-        "定义为一字节",
-        "定义为指针大小",
-        "等于 NULL"
+        "正确",
+        "错误"
       ],
       "answer": 0,
-      "why": "void 不是完整对象类型。",
-      "d": 3,
-      "type": "choice"
+      "why": "p 从第一项移动到第二项。",
+      "d": 2,
+      "type": "judge"
     },
     {
       "id": "full-053-1",
@@ -4239,16 +4215,16 @@
       "id": "full-054-1",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "const int *p 限制的是？",
+      "topic": "指针参数与结果返回",
+      "p": "void change(int *p) 中，给调用方变量赋 0 应写？",
       "options": [
-        "不能通过 p 改所指 int",
-        "p 不能改指向",
-        "任何地方都不能修改目标",
-        "p 不可读取"
+        "*p=0;",
+        "p=0;",
+        "&p=0;",
+        "int p=0;"
       ],
       "answer": 0,
-      "why": "底层 const 限制这条访问路径，不等于指针本身为常量。",
+      "why": "*p 是指向的变量；给 p 赋 0 只改变形参指针。",
       "d": 2,
       "type": "choice"
     },
@@ -4256,48 +4232,42 @@
       "id": "full-054-2",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "int *const p=&x; 限制的是？",
-      "options": [
-        "p 不能改指向",
-        "不能改 *p",
-        "x 变成只读",
-        "p 自动为 NULL"
-      ],
-      "answer": 0,
-      "why": "const 限定指针对象本身。",
+      "topic": "指针参数与结果返回",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid add(int *p,int n){*p+=n;}int main(void){int x=5;add(&x,3);add(&x,-2);printf(\"%d\",x);return 0;}",
+      "answer": "6",
+      "why": "原变量先加 3 得 8，再减 2 得 6。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-054-3",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "可以直接把 int * 赋给 const int *。",
+      "topic": "指针参数与结果返回",
+      "p": "调用 void f(int *p) 时，可以把 int 变量 x 的地址 &x 传入。",
       "options": [
         "正确",
         "错误"
       ],
       "answer": 0,
-      "why": "添加所指类型的 const 限定通常是允许的。",
-      "d": 2,
+      "why": "形参需要 int 的地址，与 &x 匹配。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-054-4",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "const int *const p=&x; 哪项正确？",
+      "topic": "指针参数与结果返回",
+      "p": "函数要同时给出最小值和最大值，常见方法是？",
       "options": [
-        "既不能改 p，也不能通过 p 改目标",
-        "两者都能改",
-        "只能改 p",
-        "只能改 *p"
+        "用两个指针参数分别写回结果",
+        "一条 return 直接返回两个 int",
+        "把两个形参声明成 void",
+        "在 return 后用空格分开两个变量"
       ],
       "answer": 0,
-      "why": "两处 const 分别限定所指值与指针本身。",
+      "why": "两个指针参数可分别修改调用方的结果变量。",
       "d": 2,
       "type": "choice"
     },
@@ -4305,33 +4275,23 @@
       "id": "full-054-5",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "int* 与 double* 指向不同类型对象的主要含义是？",
-      "options": [
-        "解引用类型和指针运算步长不同",
-        "地址空间必然不一样",
-        "都只能加 1",
-        "二者总可直接互换读取"
-      ],
-      "answer": 0,
-      "why": "不能因为都是地址就忽略类型、对齐和有效类型规则。",
-      "d": 3,
-      "type": "choice"
+      "topic": "指针参数与结果返回",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid f(int *p,int *q){*p=*q+1;}int main(void){int a=3,b=7;f(&a,&b);printf(\"%d %d\",a,b);return 0;}",
+      "answer": "8 7",
+      "why": "只写入第一个变量，第二个变量只被读取。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-054-6",
       "plan": "full",
       "chapter": "指针",
-      "topic": "const 与类型匹配",
-      "p": "强制去掉 const 后就总能安全修改原本定义为 const 的对象。",
-      "options": [
-        "正确",
-        "错误"
-      ],
-      "answer": 1,
-      "why": "修改本来就为 const 的对象属于未定义行为。",
+      "topic": "指针参数与结果返回",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid f(int *p,int *q){int t=*p;*p+=*q;*q=t;}int main(void){int a=2,b=5;f(&a,&b);printf(\"%d %d\",a,b);return 0;}",
+      "answer": "7 2",
+      "why": "保存 a 的旧值，令 a 为两数之和，再把旧 a 写入 b。",
       "d": 3,
-      "type": "judge"
+      "type": "fill"
     },
     {
       "id": "full-055-1",
@@ -4425,161 +4385,129 @@
       "id": "full-056-1",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "为 n 个 int 分配空间，合理写法是？",
-      "options": [
-        "malloc(n * sizeof *p)",
-        "malloc(n)",
-        "malloc(sizeof p)",
-        "malloc(sizeof(int*))"
-      ],
-      "answer": 0,
-      "why": "需在 n 合法且乘法不溢出的前提下分配完整元素总大小。",
+      "topic": "指针遍历数组",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[]={8,3,6,1};int *p=a;int s=0;for(int i=0;i<4;i++)if(p[i]>4)s+=p[i];printf(\"%d\",s);",
+      "answer": "14",
+      "why": "只累加大于 4 的元素 8 和 6。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-056-2",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "malloc 成功后返回的内容自动是全零。",
+      "topic": "指针遍历数组",
+      "p": "p 指向数组首元素，访问下标 i 的元素可写？",
       "options": [
-        "正确",
-        "错误"
+        "*(p+i)",
+        "*p+i 总等价",
+        "&p[i] 就是元素值",
+        "p+i 就是元素值"
       ],
-      "answer": 1,
-      "why": "malloc 的内存未初始化。",
-      "d": 2,
-      "type": "judge"
+      "answer": 0,
+      "why": "p+i 定位目标元素，解引用后得到元素值。",
+      "d": 1,
+      "type": "choice"
     },
     {
       "id": "full-056-3",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "malloc 失败通常返回？",
-      "options": [
-        "NULL",
-        "-1",
-        "0 个元素的有效数组",
-        "前一块地址"
-      ],
-      "answer": 0,
-      "why": "必须检查返回值后再访问。",
-      "d": 1,
-      "type": "choice"
+      "topic": "指针遍历数组",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[]={2,5,8};int *p=a;for(int i=0;i<3;i++)p[i]+=i;printf(\"%d %d\",a[1],a[2]);",
+      "answer": "6 10",
+      "why": "每项加自己的下标，变为 2、6、10。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-056-4",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "realloc(p,n) 的结果为什么先存临时指针？",
-      "options": [
-        "失败时保留原 p，避免丢失旧块",
-        "让 n 自动翻倍",
-        "保证移动到原地址",
-        "让所有别名同步更新"
-      ],
-      "answer": 0,
-      "why": "失败返回 NULL，旧块仍有效。",
-      "d": 3,
-      "type": "choice"
+      "topic": "指针遍历数组",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[]={7,2,9,4};int *p=a;int m=*p;for(int i=1;i<4;i++)if(p[i]<m)m=p[i];printf(\"%d\",m);",
+      "answer": "2",
+      "why": "逐项比较并保留最小值。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-056-5",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "calloc 的字节清零保证所有类型的值都按语言语义为零。",
+      "topic": "指针遍历数组",
+      "p": "p 指向 int 数组首元素时，p[2] 与 *(p+2) 访问同一个元素。",
       "options": [
         "正确",
         "错误"
       ],
-      "answer": 1,
-      "why": "字节全零并不在所有实现上等同于空指针或浮点零的表示。",
-      "d": 3,
+      "answer": 0,
+      "why": "下标访问与对应的指针表达式等价。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-056-6",
       "plan": "full",
       "chapter": "指针",
-      "topic": "动态分配与失败",
-      "p": "动态数组大小发生变化后，原来的元素数通常应保存在哪里？",
-      "options": [
-        "由程序另行保存的长度变量",
-        "指针值自动携带",
-        "sizeof(p) 中",
-        "malloc 名称中"
-      ],
-      "answer": 0,
-      "why": "指针本身不保存数组长度。",
-      "d": 2,
-      "type": "choice"
+      "topic": "指针遍历数组",
+      "p": "写出输出结果（多个值用空格分隔）：\nint a[]={3,4,5,6};int *p=a+1;int s=0;for(int i=0;i<3;i++)s+=*(p+i);printf(\"%d\",s);",
+      "answer": "15",
+      "why": "从第二项开始累加 4、5、6。",
+      "d": 3,
+      "type": "fill"
     },
     {
       "id": "full-057-1",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "free(NULL) 是安全的空操作。",
-      "options": [
-        "正确",
-        "错误"
-      ],
-      "answer": 0,
-      "why": "标准明确允许释放空指针。",
-      "d": 1,
-      "type": "judge"
+      "topic": "指针与数组修改",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid twice(int a[],int n){for(int i=0;i<n;i++)a[i]*=2;}int main(void){int a[]={1,4,3};twice(a,3);printf(\"%d %d\",a[0],a[2]);return 0;}",
+      "answer": "2 6",
+      "why": "函数把数组元素改为 2、8、6。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-057-2",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "释放 p 后还有 q 指向原动态对象，q 现在如何？",
+      "topic": "指针与数组修改",
+      "p": "让指针 p 指向已经存在的 int 变量 n，应写？",
       "options": [
-        "悬空指针，不能继续解引用",
-        "自动变 NULL",
-        "继续有效",
-        "变成 static 指针"
+        "p=&n;",
+        "*p=&n;",
+        "&p=n;",
+        "p=*n;"
       ],
       "answer": 0,
-      "why": "释放对象会使全部指向该对象的访问失效。",
-      "d": 2,
+      "why": "&n 是变量地址，赋给指针后可访问对应变量。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-057-3",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "哪种情况属于内存泄漏？",
-      "options": [
-        "丢失唯一可用地址且没有释放动态块",
-        "释放后设 NULL",
-        "free(NULL)",
-        "只用局部 int"
-      ],
-      "answer": 0,
-      "why": "内存仍分配着，但程序失去管理它的有效地址。",
+      "topic": "指针与数组修改",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid clear(int a[],int n){for(int i=0;i<n;i++)if(a[i]<0)a[i]=0;}int main(void){int a[]={-2,3,-1,4};clear(a,4);printf(\"%d %d %d\",a[0],a[1],a[2]);return 0;}",
+      "answer": "0 3 0",
+      "why": "只把负数改为 0。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-057-4",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "给一个指针 p 赋 NULL，会自动释放它原来指向的动态内存。",
+      "topic": "指针与数组修改",
+      "p": "int *p; 声明后，不给 p 指向有效变量就可以直接执行 *p=3。",
       "options": [
         "正确",
         "错误"
       ],
       "answer": 1,
-      "why": "改变指针值与释放对象是两件事。",
+      "why": "指针必须先保存有效地址。",
       "d": 1,
       "type": "judge"
     },
@@ -4587,34 +4515,28 @@
       "id": "full-057-5",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "为什么不应返回普通局部数组的首地址供函数结束后读取？",
-      "options": [
-        "局部数组生命周期已结束",
-        "数组地址必为零",
-        "数组不能有地址",
-        "返回时会自动深拷贝"
-      ],
-      "answer": 0,
-      "why": "离开函数后指针悬空。",
-      "d": 2,
-      "type": "choice"
+      "topic": "指针与数组修改",
+      "p": "写出输出结果（多个值用空格分隔）：\nvoid f(int a[],int n){for(int i=0;i<n/2;i++){int t=a[i];a[i]=a[n-1-i];a[n-1-i]=t;}}int main(void){int a[]={2,7,4};f(a,3);printf(\"%d %d %d\",a[0],a[1],a[2]);return 0;}",
+      "answer": "4 7 2",
+      "why": "交换首尾，中间元素不变。",
+      "d": 3,
+      "type": "fill"
     },
     {
       "id": "full-057-6",
       "plan": "full",
       "chapter": "指针",
-      "topic": "生命周期与内存释放",
-      "p": "已经成功 free 的同一动态地址再次 free，会怎样？",
+      "topic": "指针与数组修改",
+      "p": "int a[3]; int *p=a; 执行 p[1]=8 后改变的是？",
       "options": [
-        "未定义行为",
-        "安全空操作",
-        "仅减小长度",
-        "自动忽略"
+        "a[1]",
+        "a[0]",
+        "指针 p 自身的地址",
+        "数组的长度"
       ],
       "answer": 0,
-      "why": "重复释放违反内存管理约束。",
-      "d": 2,
+      "why": "指针下标访问写入对应数组元素。",
+      "d": 1,
       "type": "choice"
     },
     {
@@ -4921,21 +4843,21 @@
       "id": "full-062-1",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{char s[4];};struct S a={\"cat\"},b=a;b.s[0]='b';printf(\"%s %s\",a.s,b.s);",
-      "answer": "cat bat",
-      "why": "数组作为结构体成员，在整体赋值时复制内容。",
-      "d": 3,
+      "topic": "结构体中的数组成员",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{char name[8];int score;};struct S s={\"Li\",85};printf(\"%s %d\",s.name,s.score);",
+      "answer": "Li 85",
+      "why": "分别输出姓名和成绩成员。",
+      "d": 2,
       "type": "fill"
     },
     {
       "id": "full-062-2",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "写出输出结果（多个值用空格分隔）：\nint n=4;struct S{int *p;};struct S a={&n},b=a;*b.p=9;printf(\"%d\",*a.p);",
-      "answer": "9",
-      "why": "指针成员只复制地址，两个结构体共享目标。",
+      "topic": "结构体中的数组成员",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int score[3];};struct S s={{70,80,90}};int sum=0;for(int i=0;i<3;i++)sum+=s.score[i];printf(\"%d\",sum);",
+      "answer": "240",
+      "why": "累加成员数组的三项。",
       "d": 2,
       "type": "fill"
     },
@@ -4943,42 +4865,42 @@
       "id": "full-062-3",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "含动态指针成员的结构体赋值后，两份结构体各自 free 同一地址的风险是？",
+      "topic": "结构体中的数组成员",
+      "p": "struct S{int a[3];};struct S s; 访问成员数组第二项应写？",
       "options": [
-        "重复释放",
-        "自动深拷贝",
-        "始终安全",
-        "只释放副本"
+        "s.a[1]",
+        "s[1].a",
+        "s.a(1)",
+        "s->a[1]"
       ],
       "answer": 0,
-      "why": "需要明确所有权，不能两次释放同一动态对象。",
-      "d": 3,
+      "why": "先用点号取成员，再用下标。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-062-4",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "结构体整体赋值会自动复制指针成员指向的整块动态内存。",
+      "topic": "结构体中的数组成员",
+      "p": "结构体变量可以包含字符数组，用来保存姓名。",
       "options": [
         "正确",
         "错误"
       ],
-      "answer": 1,
-      "why": "指针成员复制的是地址值。",
-      "d": 2,
+      "answer": 0,
+      "why": "字符数组可以作为结构体成员。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-062-5",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "写出输出结果（多个值用空格分隔）：\nint x=1,y=2;struct S{int *p;};struct S a={&x},b=a;b.p=&y;printf(\"%d %d\",*a.p,*b.p);",
-      "answer": "1 2",
-      "why": "指针对象是独立成员，改 b.p 的指向不改 a.p。",
+      "topic": "结构体中的数组成员",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int a[2];};struct S x={{3,6}},y=x;y.a[1]=9;printf(\"%d %d\",x.a[1],y.a[1]);",
+      "answer": "6 9",
+      "why": "整体赋值复制数组成员内容，修改副本不改变原成员。",
       "d": 3,
       "type": "fill"
     },
@@ -4986,18 +4908,12 @@
       "id": "full-062-6",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "数组成员与指针成员",
-      "p": "实现深拷贝时，指针成员通常还需做什么？",
-      "options": [
-        "另外分配存储并复制目标内容",
-        "只加 const",
-        "只复制 sizeof 指针字节",
-        "直接清零原对象"
-      ],
-      "answer": 0,
-      "why": "还应处理分配失败和后续释放责任。",
-      "d": 3,
-      "type": "choice"
+      "topic": "结构体中的数组成员",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{char name[6];};struct S s={\"cat\"};s.name[0]='b';printf(\"%s\",s.name);",
+      "answer": "bat",
+      "why": "数组成员可以逐字符修改。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-063-1",
@@ -5079,288 +4995,256 @@
       "id": "full-064-1",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "sizeof(struct S) 为什么可能大于成员大小之和？",
-      "options": [
-        "编译器可能插入对齐填充",
-        "结构体必含函数",
-        "成员总复制两次",
-        "变量名也占空间"
-      ],
-      "answer": 0,
-      "why": "成员间和尾部都可能有填充。",
+      "topic": "学生成绩统计",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int score;};struct S a[]={{56},{80},{60},{49}};int n=0;for(int i=0;i<4;i++)if(a[i].score>=60)n++;printf(\"%d\",n);",
+      "answer": "2",
+      "why": "80 和 60 达到及格线，共两人。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-064-2",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "同一结构体的首个成员前一定有一个填充字节。",
+      "topic": "学生成绩统计",
+      "p": "统计结构体数组 a 中不及格人数，判断条件应为？",
       "options": [
-        "正确",
-        "错误"
+        "a[i].score < 60",
+        "a.score[i] < 60",
+        "a[i] < 60",
+        "a->i < 60"
       ],
-      "answer": 1,
-      "why": "结构体开头不允许有未命名填充，其他位置可能有。",
-      "d": 3,
-      "type": "judge"
+      "answer": 0,
+      "why": "先选择第 i 个结构体，再读取 score。",
+      "d": 1,
+      "type": "choice"
     },
     {
       "id": "full-064-3",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "改变结构体成员声明顺序可能影响什么？",
-      "options": [
-        "对齐填充和整体大小",
-        "所有成员名称",
-        "整数类型的规则",
-        "字符编码必定改变"
-      ],
-      "answer": 0,
-      "why": "不同排列可能产生不同填充。",
+      "topic": "学生成绩统计",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{1,75},{2,92},{3,88}};int k=0;for(int i=1;i<3;i++)if(a[i].score>a[k].score)k=i;printf(\"%d\",a[k].id);",
+      "answer": "2",
+      "why": "找到最高分所在下标，再输出学号。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-064-4",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "要获取成员在结构体中的偏移，可使用？",
-      "options": [
-        "offsetof",
-        "strlen",
-        "strcmp",
-        "rand"
-      ],
-      "answer": 0,
-      "why": "需包含 stddef.h，并满足 offsetof 的适用约束。",
-      "d": 3,
-      "type": "choice"
-    },
-    {
-      "id": "full-064-5",
-      "plan": "full",
-      "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "sizeof 结构体包含尾部填充。",
+      "topic": "学生成绩统计",
+      "p": "统计学生平均分时，double avg=sum/3.0; 可以保留小数。",
       "options": [
         "正确",
         "错误"
       ],
       "answer": 0,
-      "why": "尾部填充有助于结构体数组各元素满足对齐。",
-      "d": 2,
+      "why": "分母为浮点数，使用浮点除法。",
+      "d": 1,
       "type": "judge"
+    },
+    {
+      "id": "full-064-5",
+      "plan": "full",
+      "chapter": "结构体",
+      "topic": "学生成绩统计",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int score;};struct S a[]={{58},{76},{99}};for(int i=0;i<3;i++){a[i].score+=3;if(a[i].score>100)a[i].score=100;}printf(\"%d %d\",a[0].score,a[2].score);",
+      "answer": "61 100",
+      "why": "每人加 3，超过 100 的成绩改为 100。",
+      "d": 2,
+      "type": "fill"
     },
     {
       "id": "full-064-6",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "布局与对齐",
-      "p": "直接把结构体原始内存写入文件作为跨平台格式，主要风险是？",
-      "options": [
-        "填充、字节序、类型宽度等实现差异",
-        "文件总打不开",
-        "所有成员自动加密",
-        "只能写第一项"
-      ],
-      "answer": 0,
-      "why": "跨平台格式应显式编码各字段。",
+      "topic": "学生成绩统计",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int math,c;};struct S a[]={{70,80},{85,60},{90,95}};int n=0;for(int i=0;i<3;i++)if(a[i].math>=80&&a[i].c>=80)n++;printf(\"%d\",n);",
+      "answer": "1",
+      "why": "仅第三人的两门成绩都达到 80。",
       "d": 3,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-065-1",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "typedef struct {int x;} Point; 后如何定义变量？",
+      "topic": "结构体声明与类型名",
+      "p": "已有 struct Student{int score;};，正确的变量定义是？",
       "options": [
-        "Point p;",
-        "struct Point p; 必定合法",
-        "typedef p;",
-        "Point = p;"
+        "struct Student s;",
+        "Student struct s;",
+        "struct s Student;",
+        "int Student s;"
       ],
       "answer": 0,
-      "why": "这里 Point 是类型别名，不是结构体标签。",
-      "d": 2,
+      "why": "用 struct 和标签名指定类型。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-065-2",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "typedef 会创建一个与原类型不兼容的全新类型。",
+      "topic": "结构体声明与类型名",
+      "p": "定义结构体类型时，就一定同时定义了该类型的变量。",
       "options": [
         "正确",
         "错误"
       ],
       "answer": 1,
-      "why": "typedef 为已有类型建立别名。",
-      "d": 2,
+      "why": "可以只定义类型，再单独定义变量。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-065-3",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "写出输出结果（多个值用空格分隔）：\nenum E{A=2,B,C=7,D};printf(\"%d %d\",B,D);",
-      "answer": "3 8",
-      "why": "未显式指定的枚举值是前一项加一。",
+      "topic": "结构体声明与类型名",
+      "p": "struct S{int x;};struct S a,b; 定义了几个结构体变量？",
+      "options": [
+        "2",
+        "1",
+        "3",
+        "0"
+      ],
+      "answer": 0,
+      "why": "a、b 都是该类型的变量。",
       "d": 1,
-      "type": "fill"
+      "type": "choice"
     },
     {
       "id": "full-065-4",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "typedef int *IntPtr; const IntPtr p=&x; 中 const 修饰什么？",
+      "topic": "结构体声明与类型名",
+      "p": "typedef struct {int x,y;} Point; 后，哪项能定义变量？",
       "options": [
-        "指针本身",
-        "所指 int",
-        "函数参数",
-        "整数 x 必定只读"
+        "Point p;",
+        "Point=p;",
+        "struct p;",
+        "typedef p Point;"
       ],
       "answer": 0,
-      "why": "类型别名代表整个指针类型。",
-      "d": 3,
+      "why": "Point 是结构体类型的别名。",
+      "d": 2,
       "type": "choice"
     },
     {
       "id": "full-065-5",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "写出输出结果（多个值用空格分隔）：\nenum State{OFF,ON};enum State s=ON;printf(\"%d\",s==ON);",
-      "answer": "1",
-      "why": "s 的值为 ON，比较成立。",
-      "d": 1,
+      "topic": "结构体声明与类型名",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct P{int x,y;};struct P a={3,4};struct P b=a;b.x+=b.y;printf(\"%d %d\",a.x,b.x);",
+      "answer": "3 7",
+      "why": "b 复制 a 后修改自己的 x，不改变 a。",
+      "d": 2,
       "type": "fill"
     },
     {
       "id": "full-065-6",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "typedef 与枚举",
-      "p": "自引用结构体定义中，应如何引用下一个同类型节点？",
+      "topic": "结构体声明与类型名",
+      "p": "struct S{int x,y;};struct S a={2,5}; 哪项得到两成员之和？",
       "options": [
-        "struct Node *next;",
-        "struct Node next;",
-        "int next[] 必定等价",
-        "struct next Node;"
+        "a.x+a.y",
+        "a[x]+a[y]",
+        "S.x+S.y",
+        "a->x+a->y"
       ],
       "answer": 0,
-      "why": "不能按值包含无限大小的自身，但可含自身类型指针。",
-      "d": 2,
+      "why": "结构体变量用点号访问成员。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-066-1",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "union 与 struct 在成员存储上的主要区别是？",
-      "options": [
-        "union 的成员共享存储空间",
-        "union 每个成员独立排列",
-        "union 只能一个成员",
-        "union 不能含 int"
-      ],
-      "answer": 0,
-      "why": "同一空间用于不同成员表示。",
+      "topic": "结构体条件筛选",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{1,90},{2,59},{3,85}};for(int i=0;i<3;i++)if(a[i].score>=85)printf(\"%d \",a[i].id);",
+      "answer": "1 3",
+      "why": "输出成绩至少为 85 的学号。",
       "d": 2,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-066-2",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "联合体大小必定等于所有成员大小之和。",
+      "topic": "结构体条件筛选",
+      "p": "筛选成绩在 60 到 79 之间的学生，应写？",
       "options": [
-        "正确",
-        "错误"
+        "s.score>=60 && s.score<=79",
+        "60<=s.score<=79",
+        "s.score>=60 || s.score<=79",
+        "s>=60 && s<=79"
       ],
-      "answer": 1,
-      "why": "通常至少容纳最大成员并满足对齐，不是成员大小之和。",
+      "answer": 0,
+      "why": "两个边界条件必须同时成立。",
       "d": 2,
-      "type": "judge"
+      "type": "choice"
     },
     {
       "id": "full-066-3",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "写出输出结果（多个值用空格分隔）：\nunion U{int n;char c;};union U u;u.n=6;printf(\"%d\",u.n);",
-      "answer": "6",
-      "why": "写入 n 后读取同一成员 n。",
-      "d": 1,
+      "topic": "结构体条件筛选",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{4,80},{7,90},{9,80}};int n=0;for(int i=0;i<3;i++)if(a[i].score==80)n+=a[i].id;printf(\"%d\",n);",
+      "answer": "13",
+      "why": "符合条件的学号是 4 和 9，和为 13。",
+      "d": 2,
       "type": "fill"
     },
     {
       "id": "full-066-4",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "为避免依赖表示细节，联合体用作多种数据之一时常额外保存什么？",
+      "topic": "结构体条件筛选",
+      "p": "遍历结构体数组时，可用 if(a[i].score>max) 比较当前成绩与最大值。",
       "options": [
-        "记录当前有效成员的类型标签",
-        "全部成员地址之和",
-        "随机数",
-        "变量名长度"
+        "正确",
+        "错误"
       ],
       "answer": 0,
-      "why": "标签帮助使用正确成员解释数据。",
-      "d": 2,
-      "type": "choice"
+      "why": "取出数值成员后按普通整数比较。",
+      "d": 1,
+      "type": "judge"
     },
     {
       "id": "full-066-5",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "向 union 的一个成员写入后，其它成员的原先值仍保证保留。",
-      "options": [
-        "正确",
-        "错误"
-      ],
-      "answer": 1,
-      "why": "共享存储，写入一个成员会覆盖相应表示。",
+      "topic": "结构体条件筛选",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int x,y;};struct S a[]={{2,5},{4,1},{3,3}};int n=0;for(int i=0;i<3;i++)if(a[i].x<a[i].y)n++;printf(\"%d\",n);",
+      "answer": "1",
+      "why": "仅第一项满足，相等不计入。",
       "d": 2,
-      "type": "judge"
+      "type": "fill"
     },
     {
       "id": "full-066-6",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "联合体与对象表示",
-      "p": "按字节查看对象表示时应优先使用哪种指针类型？",
-      "options": [
-        "unsigned char *",
-        "任意 struct *",
-        "double *",
-        "int **"
-      ],
-      "answer": 0,
-      "why": "字符类型访问对象表示具有特殊许可。",
+      "topic": "结构体条件筛选",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int score;};struct S a[]={{80},{60},{80},{90}};int sum=0,n=0;for(int i=0;i<4;i++){if(a[i].score<80)continue;sum+=a[i].score;n++;}printf(\"%d %d\",sum,n);",
+      "answer": "250 3",
+      "why": "保留 80、80、90，合计 250，共三项。",
       "d": 3,
-      "type": "choice"
+      "type": "fill"
     },
     {
       "id": "full-067-1",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "写出输出结果（多个值用空格分隔）：\nstruct N{int v;struct N *next;};struct N b={7,0},a={2,&b};printf(\"%d\",a.next->v);",
-      "answer": "7",
-      "why": "a.next 指向 b。",
+      "topic": "结构体查找与排序",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{3,70},{5,88},{8,90}};int k=-1;for(int i=0;i<3;i++)if(a[i].id==5){k=i;break;}printf(\"%d\",a[k].score);",
+      "answer": "88",
+      "why": "找到下标 1，读取成绩。",
       "d": 2,
       "type": "fill"
     },
@@ -5368,16 +5252,16 @@
       "id": "full-067-2",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "单链表遍历到末尾通常检查什么？",
+      "topic": "结构体查找与排序",
+      "p": "交换 struct S 类型的 a、b，正确做法是？",
       "options": [
-        "当前节点指针是否为 NULL",
-        "节点数值是否为零",
-        "sizeof 是否为零",
-        "节点地址是不是偶数"
+        "struct S t=a; a=b; b=t;",
+        "a=b; b=a;",
+        "a+b;",
+        "a==b;"
       ],
       "answer": 0,
-      "why": "空 next 指针通常作为链尾标志。",
+      "why": "临时结构体保存原 a，才能完成交换。",
       "d": 2,
       "type": "choice"
     },
@@ -5385,54 +5269,54 @@
       "id": "full-067-3",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "写出输出结果（多个值用空格分隔）：\nstruct N{int v;struct N *next;};struct N c={3,0},b={2,&c},a={1,&b};a.next=a.next->next;printf(\"%d\",a.next->v);",
-      "answer": "3",
-      "why": "跳过 b，让 a.next 直接指向 c。",
-      "d": 3,
+      "topic": "结构体查找与排序",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{1,90},{2,60}};if(a[0].score>a[1].score){struct S t=a[0];a[0]=a[1];a[1]=t;}printf(\"%d %d\",a[0].id,a[1].id);",
+      "answer": "2 1",
+      "why": "交换整个记录，学号和成绩一起移动。",
+      "d": 2,
       "type": "fill"
     },
     {
       "id": "full-067-4",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "仅将一个节点从链表连接中移除就会自动 free 该节点。",
+      "topic": "结构体查找与排序",
+      "p": "按成绩排序时，只交换成绩而不交换学号，会打乱学生与成绩的对应关系。",
       "options": [
         "正确",
         "错误"
       ],
-      "answer": 1,
-      "why": "重新连边与释放内存互不等价。",
-      "d": 2,
+      "answer": 0,
+      "why": "应交换整个学生记录。",
+      "d": 1,
       "type": "judge"
     },
     {
       "id": "full-067-5",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "释放当前动态链表节点后还需继续遍历，正确顺序是？",
+      "topic": "结构体查找与排序",
+      "p": "顺序查找学号，初始 k=-1，查找结束仍为 -1，通常表示？",
       "options": [
-        "先保存 next，再 free 当前节点",
-        "先 free 再读 next",
-        "只需 p++",
-        "连续 free 同一地址"
+        "没有找到",
+        "找到第一个",
+        "找到最后一个",
+        "数组长度为 1"
       ],
       "answer": 0,
-      "why": "释放后不能再读取当前节点成员。",
-      "d": 3,
+      "why": "用不合法下标作为未找到的标记。",
+      "d": 1,
       "type": "choice"
     },
     {
       "id": "full-067-6",
       "plan": "full",
       "chapter": "结构体",
-      "topic": "链式节点基础",
-      "p": "写出输出结果（多个值用空格分隔）：\nstruct N{int v;struct N *next;};struct N b={4,0},a={6,&b};int s=0;for(struct N *p=&a;p;p=p->next)s+=p->v;printf(\"%d\",s);",
-      "answer": "10",
-      "why": "沿 next 访问两个节点，和为 10。",
-      "d": 2,
+      "topic": "结构体查找与排序",
+      "p": "写出输出结果（多个值用空格分隔）：\nstruct S{int id,score;};struct S a[]={{1,80},{2,90},{3,90}};int k=0;for(int i=1;i<3;i++)if(a[i].score>=a[k].score)k=i;printf(\"%d\",a[k].id);",
+      "answer": "3",
+      "why": "使用 >=，同分时由后面的记录更新下标。",
+      "d": 3,
       "type": "fill"
     },
     {
@@ -5462,9 +5346,9 @@
       "plan": "full",
       "chapter": "结构体",
       "topic": "长程序结构体综合",
-      "p": "阅读完整程序，写出所有输出（按顺序填写，换行或空格均可）：\n#include <stdio.h>\nstruct N{int v;struct N *next;};int sum(struct N *p){if(!p)return 0;return p->v+sum(p->next);}int main(void){struct N c={5,0},b={3,&c},a={1,&b};b.next=0;printf(\"%d %d\",sum(&a),sum(&c));return 0;}",
-      "answer": "4 5",
-      "why": "断开 b 到 c 的连接，a 链只剩 1、3；c 自身仍有效。",
+      "p": "阅读完整程序，写出所有输出（按顺序填写，换行或空格均可）：\n#include <stdio.h>\nstruct S{int id,score;};int total(struct S a[],int n){int s=0;for(int i=0;i<n;i++)if(a[i].score>=60)s+=a[i].score;return s;}int main(void){struct S a[]={{1,50},{2,70},{3,80}};int x=total(a,3);a[0].score=60;printf(\"%d %d\",x,total(a,3));return 0;}",
+      "answer": "150 210",
+      "why": "第一次加 70、80；修改后再加上 60。",
       "d": 4,
       "type": "long"
     },
@@ -5484,9 +5368,9 @@
       "plan": "full",
       "chapter": "结构体",
       "topic": "长程序结构体综合",
-      "p": "阅读完整程序，写出所有输出（按顺序填写，换行或空格均可）：\n#include <stdio.h>\nstruct N{int v;struct N *next;};int main(void){struct N c={3,0},b={2,&c},a={1,&b};struct N *p=&a,*prev=0;while(p){struct N *n=p->next;p->next=prev;prev=p;p=n;}while(prev){printf(\"%d\",prev->v);prev=prev->next;}return 0;}",
-      "answer": "321",
-      "why": "保存后继、反转连接，再沿新头结点 c 走到 b、a。",
+      "p": "阅读完整程序，写出所有输出（按顺序填写，换行或空格均可）：\n#include <stdio.h>\nstruct S{int id,score;};int main(void){struct S a[]={{1,70},{2,90},{3,80}};for(int i=0;i<2;i++)for(int j=0;j<2-i;j++)if(a[j].score<a[j+1].score){struct S t=a[j];a[j]=a[j+1];a[j+1]=t;}for(int i=0;i<3;i++)printf(\"%d \",a[i].id);return 0;}",
+      "answer": "2 3 1",
+      "why": "按成绩降序排序，学号依次为 2、3、1。",
       "d": 4,
       "type": "long"
     },
