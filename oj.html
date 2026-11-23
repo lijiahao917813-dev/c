@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C 算法练习</title><style>
-*{box-sizing:border-box}body{background:#f4f6ef;color:#20392d;font:16px/1.65 system-ui;margin:0}main{max-width:850px;margin:auto;padding:24px 16px}section{background:white;padding:clamp(16px,4vw,32px);border:1px solid #dde5d8;border-radius:18px;margin:16px 0}a{color:#316749}select,button{font:inherit;border-radius:10px;padding:9px 14px;border:1px solid #cedbce;background:white}button{cursor:pointer}button:disabled{opacity:.55}#submit{background:#28694e;color:white}textarea,pre{font:15px/1.65 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}textarea{width:100%;height:310px;background:#202622;color:#eef5ef;padding:16px;border-radius:12px;tab-size:4}pre{background:#eef3eb;padding:12px;border-radius:8px}h1,h2,p{margin:8px 0}label{display:block;font-weight:650;margin-bottom:5px}select{max-width:100%}</style><main><a href="./">← 复习首页</a><h1>算法练习</h1><label for="task">选择题目</label><select id="task"></select><section><h2 id="title"></h2><p id="statement"></p><b>样例输入</b><pre id="input"></pre><b>样例输出</b><pre id="expected"></pre></section><section><label for="source">你的 C 程序</label><textarea id="source" spellcheck="false"></textarea><div><button id="sample">运行样例</button> <button id="submit">提交判题</button> <button id="stop" hidden>停止</button></div><pre id="result" role="status">等待运行</pre></section></main><script>
+*{box-sizing:border-box}body{background:#f4f6ef;color:#20392d;font:16px/1.65 system-ui;margin:0}main{max-width:850px;margin:auto;padding:24px 16px}section{background:white;padding:clamp(16px,4vw,32px);border:1px solid #dde5d8;border-radius:18px;margin:16px 0}a{color:#316749}select,button{font:inherit;border-radius:10px;padding:9px 14px;border:1px solid #cedbce;background:white}button{cursor:pointer}button:disabled{opacity:.55}#submit{background:#28694e;color:white}textarea,pre{font:15px/1.65 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}textarea{width:100%;height:310px;background:#202622;color:#eef5ef;padding:16px;border-radius:12px;tab-size:4}pre{background:#eef3eb;padding:12px;border-radius:8px}h1,h2,p{margin:8px 0}label{display:block;font-weight:650;margin-bottom:5px}select{max-width:100%}main{max-width:1160px}.layout{display:grid;grid-template-columns:260px minmax(0,1fr);align-items:start;gap:18px}aside{position:sticky;top:16px;background:white;border:1px solid #dde5d8;border-radius:16px;padding:18px;margin-top:16px}aside header{display:flex;justify-content:space-between;margin-bottom:16px}#progress{font-size:13px;color:#526859}#task{border:0;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.tile{position:relative;aspect-ratio:1;padding:0;border-radius:8px;font:600 14px system-ui;color:#49594e}.tile.passed{background:#23774e;color:white;border-color:#23774e}.tile.passed:after{content:'✓';position:absolute;top:0;right:3px;font-size:10px}.tile[aria-current=true]{outline:2px solid #395a82;outline-offset:1px}article{min-width:0}@media(max-width:730px){.layout{display:block}aside{position:static}#task{grid-template-columns:repeat(auto-fit,minmax(40px,1fr))}.tile{height:42px;aspect-ratio:auto}}</style><main><a href="./">← 复习首页</a><h1>算法练习</h1><div class="layout"><aside><header><strong>编程题</strong><span id="progress"></span></header><fieldset id="task" aria-label="选择算法题"></fieldset></aside><article><section><h2 id="title"></h2><p id="statement"></p><b>样例输入</b><pre id="input"></pre><b>样例输出</b><pre id="expected"></pre></section><section><label for="source">你的 C 程序</label><textarea id="source" spellcheck="false"></textarea><div><button id="sample">运行样例</button> <button id="submit">提交判题</button> <button id="stop" hidden>停止</button></div><pre id="result" role="status">等待运行</pre></section></article></div></main><script>
 const tasks=[
 ['sum','区间奇数和','输入两个整数 a、b（0 ≤ a ≤ b ≤ 1000），输出闭区间内所有奇数的和。',[['2 7','15'],['0 0','0'],['5 5','5'],['0 1000','250000']]],
 ['digits','数位之和','输入一个 0 到 1000000000 的整数，输出它的各位数字之和。',[['4072','13'],['0','0'],['999999999','81'],['1000000000','1']]],
@@ -7,15 +7,51 @@ const tasks=[
 ['gcd','最大公约数','输入两个 1 到 1000000 的正整数，输出它们的最大公约数。',[['24 18','6'],['13 7','1'],['8 8','8'],['15 60','15']]],
 ['pal','回文单词','输入一个长度为 1 到 100 的小写英文字母单词。如果从左到右和从右到左相同，输出 YES，否则输出 NO。',[['level','YES'],['a','YES'],['abca','NO'],['abba','YES'],['cat','NO']]],
 ['sort','成绩升序排列','输入 n（1 到 100），随后输入 n 个整数成绩（0 到 100）。按从小到大的顺序输出全部成绩，用空格分隔，保留重复成绩。',[['5\n75 100 60 75 0','0 60 75 75 100'],['1\n42','42'],['4\n4 3 2 1','1 2 3 4'],['3\n9 9 9','9 9 9']]]
+,
+["clock","换算时分秒","输入总秒数（0 到 86400），依次输出小时、分钟、秒。",[["3661","1 1 1"],["0","0 0 0"],["3599","0 59 59"],["86400","24 0 0"]]],
+["leap","判断闰年","输入年份（1 到 9999）。能被 4 整除但不能被 100 整除，或能被 400 整除的年份是闰年。闰年输出 YES，否则输出 NO。",[["2024","YES"],["1900","NO"],["2000","YES"],["2023","NO"]]],
+["triangle","三边能否成三角形","输入三个正整数边长（各不超过 1000）。若任意两边之和都大于第三边，输出 YES，否则输出 NO。",[["3 4 5","YES"],["2 3 1","NO"],["9 1 2","NO"],["5 5 5","YES"]]],
+["fact","阶乘","输入 n（0 到 12），输出 n!。规定 0! 等于 1。",[["5","120"],["0","1"],["1","1"],["12","479001600"]]],
+["prime","素数判断","输入整数 n（1 到 100000），若它恰好有两个正因数则输出 YES，否则输出 NO。",[["17","YES"],["1","NO"],["2","YES"],["49","NO"]]],
+["fib","兔子数列","数列的第 1、2 项均为 1，从第 3 项起每项等于前两项之和。输入 n（1 到 40），输出第 n 项。",[["7","13"],["1","1"],["2","1"],["10","55"]]],
+["reverse","整数倒序","输入 0 到 999999 的整数，将十进制数字倒过来，按整数输出。",[["120","21"],["0","0"],["5070","705"],["9","9"]]],
+["bills","最少纸币","用面额 10 元、5 元、1 元的纸币凑出指定整数金额（0 到 1000 元），输出所需最少张数。",[["28","6"],["0","0"],["15","2"],["9","5"]]],
+["find","最后一次出现","输入 n（1 到 100）、n 个整数和目标整数。输出目标最后出现的位置（从 1 起），未出现输出 0。",[["5\n2 3 2 1 2\n2","5"],["1\n3\n2","0"],["3\n0 1 2\n0","1"]]],
+["rise","最长连续上升段","输入 n（1 到 100）和 n 个整数，输出相邻元素严格递增的最长连续段长度。",[["6\n1 3 2 4 6 0","3"],["1\n7","1"],["4\n5 5 3 2","1"],["4\n1 2 3 4","4"]]],
+["rotate","循环右移","输入 n（1 到 100）、非负整数 k（不超过 1000）和 n 个整数。将数组循环右移 k 位，依次输出各项。",[["4 1\n2 5 7 9","9 2 5 7"],["3 5\n1 2 3","2 3 1"],["2 0\n8 9","8 9"]]],
+["distinct","保留第一次出现的数","输入 n（1 到 100）和 n 个整数，按首次出现的顺序输出不同的数。",[["6\n3 2 3 4 2 1","3 2 4 1"],["3\n0 0 0","0"],["3\n-2 1 -2","-2 1"]]],
+["diag","两条对角线求和","输入阶数 n（1 到 10）及 n 行 n 列整数（每项绝对值不超过 100），输出两条对角线上所有元素之和。中心元素只算一次。",[["3\n1 2 3\n4 5 6\n7 8 9","25"],["1\n-4","-4"],["2\n1 2\n3 4","10"]]],
+["transpose","矩阵转置","输入行数 r、列数 c（均为 1 到 10）及矩阵元素。转置后按行输出矩阵。",[["2 3\n1 2 3\n4 5 6","1 4\n2 5\n3 6"],["1 2\n7 8","7\n8"],["2 1\n0\n-1","0 -1"]]],
+["vowels","统计元音","输入一个只含小写英文字母的单词（最多 100 个字符），输出 a、e、i、o、u 的出现总次数。",[["banana","3"],["sky","0"],["aeiou","5"],["book","2"]]],
+["words","数一行中的单词","输入一行小写字母和空格（最多 100 个字符），输出单词个数。连续的字母算一个单词。",[["one  two three","3"],["  hi  ","1"],["   ","0"],["a","1"]]],
+["merge","合并有序成绩","输入两个长度 n、m（均为 1 到 50），再输入两个各自升序的整数序列。将两组数合并，按升序输出，保留重复项。",[["3 2\n1 4 6\n2 4","1 2 4 4 6"],["1 1\n8\n1","1 8"],["2 1\n0 0\n0","0 0 0"]]],
+["student","按学号查成绩","输入人数 n（1 到 100），再输入 n 行互不重复的整数学号和对应成绩，最后输入待查询学号。找到则输出成绩，否则输出 -1。",[["3\n101 78\n103 95\n105 60\n103","95"],["1\n8 0\n8","0"],["2\n1 80\n2 90\n3","-1"]]]
 ];
 const el=id=>document.getElementById(id), pick=el('task'),editor=el('source'),result=el('result');
 const starter='#include <stdio.h>\n\nint main(void) {\n    \n    return 0;\n}\n';
 let worker,timer;
-function current(){return tasks[pick.selectedIndex]}
-function labels(){tasks.forEach(([id,name],i)=>pick.options[i].textContent=(localStorage.getItem('oj.pass.'+id)?'✓ ':'')+name)}
-tasks.forEach(()=>pick.add(new Option()));labels();
-function load(){const [id,name,desc,cases]=current();el('title').textContent=name;el('statement').textContent=desc;el('input').textContent=cases[0][0];el('expected').textContent=cases[0][1];editor.value=localStorage.getItem('oj.code.'+id)??starter;result.textContent='等待运行';localStorage.setItem('oj.last',id)}
-pick.selectedIndex=Math.max(0,tasks.findIndex(t=>t[0]===localStorage.getItem('oj.last')));load();pick.onchange=load;editor.oninput=()=>localStorage.setItem('oj.code.'+current()[0],editor.value);
+let selected=Math.max(0,tasks.findIndex(t=>t[0]===localStorage.getItem('oj.last')));
+function current(){return tasks[selected]}
+const tiles=tasks.map(([id,name],i)=>{
+ const button=document.createElement('button');
+ button.className='tile';button.textContent=i+1;button.title=name;
+ button.onclick=()=>{selected=i;load();labels()};
+ pick.appendChild(button);return button;
+});
+function labels(){
+ let passed=0;
+ tasks.forEach(([id,name],i)=>{
+  const done=localStorage.getItem('oj.pass.'+id)==='1';
+  if(done)passed++;
+  tiles[i].classList.toggle('passed',done);
+  tiles[i].setAttribute('aria-current',String(i===selected));
+  tiles[i].setAttribute('aria-label',(i+1)+' '+name+(done?' 已通过':' 未通过'));
+ });
+ el('progress').textContent=passed+' / '+tasks.length+' 已通过';
+}
+labels();
+function load(){const [id,name,desc,cases]=current();el('title').textContent=(selected+1)+' · '+name;el('statement').textContent=desc;el('input').textContent=cases[0][0];el('expected').textContent=cases[0][1];editor.value=localStorage.getItem('oj.code.'+id)??starter;result.textContent='等待运行';localStorage.setItem('oj.last',id)}
+load();editor.oninput=()=>localStorage.setItem('oj.code.'+current()[0],editor.value);
 function finish(message){clearTimeout(timer);worker?.terminate();worker=null;result.textContent=message;pick.disabled=editor.readOnly=el('sample').disabled=el('submit').disabled=false;el('stop').hidden=true}
 function run(all){const [id,,,cases]=current(),count=all?cases.length:1;let index=0;pick.disabled=editor.readOnly=el('sample').disabled=el('submit').disabled=true;el('stop').hidden=false;
 try{worker=new Worker('compiler/worker.js')}catch(e){finish('无法启动编译器：'+e.message);return}
